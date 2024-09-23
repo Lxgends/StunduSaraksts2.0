@@ -1,0 +1,37 @@
+main{
+    margin-left: 20rem;
+    margin-right: 20rem;
+    margin-top: 15rem;
+    text-align: center;
+}
+
+.laikimain{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pirmdiena{
+    display: flex;
+    flex-direction: column;
+}
+
+.piektdiena{
+    display: flex;
+    flex-direction: column;
+}
+
+.mainb{
+    display: flex;
+    font-size: 28px;
+    flex-direction: row;
+}
+.mainp{
+    font-size: 28px;
+    color: #282560;
+}
+.titleb{
+    font-size: 32px;
+    text-decoration: #282560 underline;
+    color: #282560;
+}
