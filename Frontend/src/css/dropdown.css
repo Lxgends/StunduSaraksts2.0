@@ -1,0 +1,54 @@
+/* Dropdown Button */
+.dropbtn {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    background-color: transparent;
+    padding: 0.75rem;
+    font-size: 32px;
+    border: none;
+    cursor: pointer;
+}
+
+
+.myInput {
+    box-sizing: border-box;
+    color: black;
+    background-position: 14px 12px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    padding: 14px 20px 12px 45px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.myInput:focus {outline: 3px solid #ddd;}
+
+.dropdown {
+    position: relative;
+    justify-content: center;
+    display: flex;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 6.5rem;
+    background-color: #f6f6f6;
+    min-width: 230px;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.show {display:block;}

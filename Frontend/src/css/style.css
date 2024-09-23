@@ -1,8 +1,6 @@
 :root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
 	font-weight: 400;
-
+	font-family: sans-serif;
 	color: #222;
 	background-color: #ffffff;
 
@@ -12,6 +10,11 @@
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 }
+.image{
+	margin: 10px;
+	margin-left: 20px;
+}
+
 
 body {
 	margin: 0;
@@ -25,16 +28,19 @@ body {
 
 header {
 	display: flex;
-	justify-content: flex-end;
-	background-color: #673ab8;
+	justify-content: flex-start;
+	background-color: #282560;
 }
 
 header nav {
 	display: flex;
+	font-size: 32px;
 }
 
 header a {
-	color: #fff;
+	display: flex;
+	align-items: center;
+	color: #ffffff;
 	padding: 0.75rem;
 	text-decoration: none;
 }
@@ -62,9 +68,3 @@ main {
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		color: #ccc;
-		background-color: #1a1a1a;
-	}
-}
