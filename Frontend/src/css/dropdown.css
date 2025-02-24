@@ -10,6 +10,9 @@
     border: none;
     cursor: pointer;
 }
+.dropbtn:active{
+	background-color: #0005;
+}
 
 
 .myInput {
@@ -31,7 +34,6 @@
     justify-content: center;
     display: flex;
 }
-
 .dropdown-content {
     display: none;
     position: absolute;
@@ -52,3 +54,9 @@
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+@media (max-width: 639px) {
+    .dropbtn{
+        display: none;
+    }
+}

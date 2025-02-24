@@ -5,7 +5,15 @@ import preact from '@preact/preset-vite';
 export default defineConfig({
 	plugins: [
 		preact({
-			prerender: {
+			server: {
+				proxy: {
+					'/api': {
+						target: 'http://localhost:8000',
+						changeOrigin: true,
+						rewrite: (path) => path.replace(/^\/api/, ''),
+						prerender: {}
+					}
+				},
 				enabled: true,
 				renderTarget: '#app',
 				additionalPrerenderRoutes: ['/404'],

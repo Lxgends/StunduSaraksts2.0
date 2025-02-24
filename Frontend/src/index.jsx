@@ -1,13 +1,15 @@
 import { LocationProvider, Router, Route, hydrate, prerender as ssr } from 'preact-iso';
 import { Header } from './components/Header.jsx';
 import { Footer } from './components/Footer.jsx';
-import KursuSaraksts from './pages/KursuSaraksts.jsx';
+import Kursusaraksts from './pages/kursusaraksts.jsx';
 import Pasniedzejs from './pages/pasniedzejs.jsx';
 import Kabinets from './pages/kabinets.jsx';
 import Laiki from './pages/laiki.jsx';
-import Bottom from "./components/Bottom.jsx"
 import { NotFound } from './pages/_404.jsx';
 import './css/style.css';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 export function App() {
 	return (
@@ -15,15 +17,14 @@ export function App() {
 			<Header />
 			<main>
 				<Router>
-					<Route path="/" component={KursuSaraksts} />
+					<Route path="/" component={Laiki} />
 					<Route path="/pasniedzejs" component={Pasniedzejs} />
 					<Route path="/kabinets" component={Kabinets} />
-					<Route path="/laiki" component={Laiki} />
+					<Route path="/kurss" component={Kursusaraksts} />
 					<Route default component={NotFound} />
 				</Router>
-				<Footer />
 			</main>
-			<Bottom />
+			<Footer />
 		</LocationProvider>
 
 	);
