@@ -1,0 +1,30 @@
+
+.stundas{
+    display: flex;
+    flex-direction: row;
+}
+.stundas:nth-child(even){
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+.skaitlis{
+    font-size: 20px;
+    padding: 10px;
+}
+.laiks{
+    font-size: 20px;
+    padding: 10px;
+    width: auto;
+}
+.stunda{
+    font-size: 20px;
+    padding: 10px;
+}
+.pasniedzejs{
+    font-size: 20px;
+    padding: 10px;
+}
+.kabinets{
+    font-size: 20px;
+    padding: 10px;
+}

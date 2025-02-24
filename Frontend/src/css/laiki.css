@@ -1,7 +1,7 @@
 main{
     margin-left: 20rem;
     margin-right: 20rem;
-    margin-top: 15rem;
+    margin-top: 5rem;
     text-align: center;
 }
 
@@ -20,18 +20,54 @@ main{
     display: flex;
     flex-direction: column;
 }
-
-.mainb{
+.classTime{
     display: flex;
-    font-size: 28px;
     flex-direction: row;
-}
-.mainp{
     font-size: 28px;
+    text-align: justify;
+}
+.classTitle{
+    padding-right: 20px;
     color: #282560;
 }
+.breakTitle{
+    color: #282560;
+}
+.pusdTime{
+    display: flex;
+    flex-direction: column;
+    font-size: 28px;
+}
 .titleb{
+    display: flex;
+    justify-content: center;
     font-size: 32px;
     text-decoration: #282560 underline;
     color: #282560;
+}
+
+@media (max-width: 639px) {
+    main {
+        margin: 2rem;
+    }
+    .laikimain{
+        display: flex;
+        flex-direction: column;
+    }
+    .piektdiena{
+        margin-top: 5rem;
+        margin-bottom: 5rem;
+    }
+    .pirmdiena{
+        margin-top: 5rem;
+    }
+    .titleb{
+        font-size: 30px;
+    }
+    .classTime{
+        font-size: 25px;
+    }
+    .pusdTime{
+        font-size: 25px;
+    }
 }

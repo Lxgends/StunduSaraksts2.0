@@ -49,9 +49,38 @@ header a.active {
 	background-color: #0005;
 }
 
+footer {
+	display: flex;
+	position: absolute;
+	bottom: 0;
+	justify-content: flex-end;
+	align-items: center;
+	background-color: #282560;
+	width: 100%;
+}
+.titlep{
+	text-decoration: none;
+	color: white;
+	font-size: 38px;
+	font-family: sans-serif;
+}
+.admin-buttons{
+	display: flex;
+	flex-direction: row;
+}
+.user-navigation{
+	display: flex;
+	flex-direction: row;
+}
 @media (max-width: 639px) {
+	header a{
+		display: none;
+	}
 	main {
 		margin: 2rem;
+	}
+	footer{
+		bottom: auto;
 	}
 }
 
