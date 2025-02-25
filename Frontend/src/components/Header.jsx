@@ -25,19 +25,60 @@ export function Header() {
                 },
             };
 
+            setLoading(true);
             try {
+                // Adding more detailed error logging
+                const pasniedzejsPromise = axios.get('http://localhost:8000/api/pasniedzejs', config)
+                    .catch(err => {
+                        console.error('Failed to fetch pasniedzejs:', err);
+                        return { data: [] };
+                    });
+                
+                const kurssPromise = axios.get('http://localhost:8000/api/kurss', config)
+                    .catch(err => {
+                        console.error('Failed to fetch kurss:', err);
+                        return { data: [] };
+                    });
+                
+                const kabinetsPromise = axios.get('http://localhost:8000/api/kabinets', config)
+                    .catch(err => {
+                        console.error('Failed to fetch kabinets:', err);
+                        return { data: [] };
+                    });
+
                 const [pasniedzejsResponse, kurssResponse, kabinetsResponse] = await Promise.all([
-                    axios.get('http://localhost:8000/api/pasniedzejs', config),
-                    axios.get('http://localhost:8000/api/kurss', config),
-                    axios.get('http://localhost:8000/api/kabinets', config),
+                    pasniedzejsPromise,
+                    kurssPromise,
+                    kabinetsPromise
                 ]);
 
-                setPasniedzejsData(Array.isArray(pasniedzejsResponse.data) ? pasniedzejsResponse.data : []);
-                setKurssData(Array.isArray(kurssResponse.data) ? kurssResponse.data : []);
-                setKabinetsData(Array.isArray(kabinetsResponse.data) ? kabinetsResponse.data : []);
+                // Log the responses to help debug
+                console.log('Pasniedzejs Response:', pasniedzejsResponse.data);
+                console.log('Kurss Response:', kurssResponse.data);
+                console.log('Kabinets Response:', kabinetsResponse.data);
+
+                // Ensure we're working with arrays
+                const pasniedzejsArray = Array.isArray(pasniedzejsResponse.data) ? pasniedzejsResponse.data : 
+                                        (pasniedzejsResponse.data && Array.isArray(pasniedzejsResponse.data.data)) ? 
+                                        pasniedzejsResponse.data.data : [];
+                
+                const kurssArray = Array.isArray(kurssResponse.data) ? kurssResponse.data : 
+                                  (kurssResponse.data && Array.isArray(kurssResponse.data.data)) ? 
+                                  kurssResponse.data.data : [];
+                
+                const kabinetsArray = Array.isArray(kabinetsResponse.data) ? kabinetsResponse.data : 
+                                     (kabinetsResponse.data && Array.isArray(kabinetsResponse.data.data)) ? 
+                                     kabinetsResponse.data.data : [];
+
+                setPasniedzejsData(pasniedzejsArray);
+                setKurssData(kurssArray);
+                setKabinetsData(kabinetsArray);
+                
+                // Reset error state if successful
+                setError(null);
             } catch (err) {
                 console.error('API Error:', err.response?.data || err.message);
-                setError(err.message);
+                setError(err.message || 'Failed to fetch data');
             } finally {
                 setLoading(false);
             }
@@ -46,10 +87,13 @@ export function Header() {
         fetchData();
         setupDropdownCloseListener();
     }, []);
+    
+    console.log("Current state:", { pasniedzejsData, kurssData, kabinetsData, loading, error });
 
     return (
         <header>
             <img src={logo} className="image" alt="VTDT Logo" />
+            {error && <div className="error-message">Error: {error}</div>}
             <nav>
                 <div className="user-navigation">
                     <div className="dropdown">
@@ -67,8 +111,8 @@ export function Header() {
                             ) : kurssData.length === 0 ? (
                                 <p>No courses available.</p>
                             ) : (
-                                kurssData.map((item) => (
-                                    <a key={item.Nosaukums || item.id} href={`/kurss?name=${item.Nosaukums || item.id}`}>
+                                kurssData.map((item, index) => (
+                                    <a key={item.Nosaukums || item.id || index} href={`/kurss/${encodeURIComponent(item.Nosaukums || item.id)}`}>
                                         {item.Nosaukums || "Unknown Course Name"}
                                     </a>
                                 ))
@@ -88,11 +132,15 @@ export function Header() {
                             />
                             {loading ? (
                                 <p>Ielādē...</p>
-                            ) : pasniedzejsData.map((item) => (
-                                <a key={`${item.Vards}-${item.Uzvards}`} href={`/pasniedzejs?=${item.Vards}`}>
-                                    {`${item.Vards.charAt(0)}. ${item.Uzvards}`}
-                                </a>
-                            ))}
+                            ) : pasniedzejsData.length === 0 ? (
+                                <p>No teachers available.</p>
+                            ) : (
+                                pasniedzejsData.map((item, index) => (
+                                    <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs/${encodeURIComponent(item.Vards)}`}>
+                                        {item.Vards && item.Uzvards ? `${item.Vards.charAt(0)}. ${item.Uzvards}` : "Unknown Teacher"}
+                                    </a>
+                                ))
+                            )}
                         </div>
                     </div>
 
@@ -108,11 +156,15 @@ export function Header() {
                             />
                             {loading ? (
                                 <p>Ielādē...</p>
-                            ) : kabinetsData.map((item) => (
-                                <a key={item.Skaitlis} href={`/kabinets?=${item.Skaitlis}`}>
-                                    {`${item.Vieta.charAt(0)}. ${item.Skaitlis}`}
-                                </a>
-                            ))}
+                            ) : kabinetsData.length === 0 ? (
+                                <p>No rooms available.</p>
+                            ) : (
+                                kabinetsData.map((item, index) => (
+                                    <a key={item.skaitlis || index} href={`/kabinets/${encodeURIComponent(item.skaitlis)}`}>
+                                        {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
+                                    </a>
+                                ))
+                            )}
                         </div>
                     </div>
                     <a href="/" className={url === '/' ? 'active' : ''} style={{ fontWeight: 'bold' }}>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kabinets', function (Blueprint $table) {
             $table->id();
             $table->text('vieta');
-            $table->integer('skaitlis');
+            $table->text('skaitlis');
             $table->timestamps();
         });
     }

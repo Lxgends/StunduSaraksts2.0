@@ -2,6 +2,7 @@ main{
     margin-left: 20rem;
     margin-right: 20rem;
     margin-top: 5rem;
+    margin-bottom: auto;
     text-align: center;
 }
 
@@ -46,7 +47,24 @@ main{
     color: #282560;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 1500px) {
+    main {
+        margin: 2rem;
+        margin-right: 10rem;
+        margin-left: 10rem;
+    }
+    .titleb{
+        font-size: 25px;
+    }
+    .classTime{
+        font-size: 20px;
+    }
+    .pusdTime{
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 640px) {
     main {
         margin: 2rem;
     }
@@ -62,12 +80,12 @@ main{
         margin-top: 5rem;
     }
     .titleb{
-        font-size: 30px;
+        font-size: 25px;
     }
     .classTime{
-        font-size: 25px;
+        font-size: 20px;
     }
     .pusdTime{
-        font-size: 25px;
+        font-size: 20px;
     }
 }

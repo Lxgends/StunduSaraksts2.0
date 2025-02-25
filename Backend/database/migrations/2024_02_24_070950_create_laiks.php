@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('laiks', function (Blueprint $table) {
             $table->id();
-            $table->text('sakumalaiks');
-            $table->text('beigulaiks');
+            $table->text('DienasTips');
+            $table->time('sakumalaiks');
+            $table->time('beigulaiks');
             $table->text('Diena');
             $table->timestamps();
         });

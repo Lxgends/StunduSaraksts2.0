@@ -22,7 +22,7 @@ class StundaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
-    protected static ?string $navigationLabel = 'Stundas';
+    protected static ?string $navigationLabel = 'Macību priekšmets';
 
     public static function form(Form $form): Form
     {

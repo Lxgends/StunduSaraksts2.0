@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Laiks extends Model
 {
     protected $table = 'laiks';
-    protected $fillable = ['sakumalaiks', 'beigulaiks'];
+    protected $fillable = ['DienasTips', 'sakumalaiks', 'beigulaiks'];
 }

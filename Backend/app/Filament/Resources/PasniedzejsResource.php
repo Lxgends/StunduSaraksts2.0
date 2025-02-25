@@ -17,6 +17,14 @@ use Filament\Tables\Columns\TextColumn;
 
 class PasniedzejsResource extends Resource
 {
+public static function getModelLabel(): string{
+        return 'Pievienot Pasniedzēju';
+    }
+    
+public static function getPluralModelLabel(): string{
+        return 'Pievienot Pasniedzējus';
+    }
+
     protected static ?string $model = Pasniedzejs::class;
 
     protected static ?string $navigationGroup = 'Personāla';

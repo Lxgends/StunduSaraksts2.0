@@ -29,16 +29,28 @@ class LaiksResource extends Resource
     {
         return $form
             ->schema([
-                TimePicker::make('sakumalaiks')
-                    ->label('Stundu sākuma laiks')
+                Forms\Components\Select::make('DienasTips')
+                    ->label('Dienas garuma tips')
+                    ->required()
+                    ->options([
+                        'normal' => 'Ikdienas stundas',
+                        'short' => 'Īsās stundas',
+                    ]),
+
+
+
+                    TimePicker::make('sakumalaiks')
+                    ->label('Pārstundu sākuma laiks')
                     ->format('H:i')
+                    ->seconds(false)
                     ->required(),
-
-
+                
                 TimePicker::make('beigulaiks')
-                    ->label('Stundu beigu laiks')
+                    ->label('Pārstundu beigu laiks')
                     ->format('H:i')
+                    ->seconds(false)
                     ->required(),
+                
             ]);
     }
 
@@ -46,6 +58,15 @@ class LaiksResource extends Resource
     {
         return $table
             ->columns([
+                    TextColumn::make('DienasTips')
+                    ->label('Dienas garuma tips')
+                    ->sortable()
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => [
+                        'normal' => 'Ikdienas stundas',
+                        'short' => 'Īsās stundas',
+                    ][$state] ?? 'Unknown'),
+
                 TextColumn::make('sakumalaiks')
                     ->label('Stundu sākuma laiks')
                     ->formatStateUsing(function ($state) {
