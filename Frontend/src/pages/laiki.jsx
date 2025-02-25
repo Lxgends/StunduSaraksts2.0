@@ -1,6 +1,47 @@
 import "../css/laiki.css"
+import axios from 'axios';
+import { useLocation } from 'preact-iso';
+import { useEffect, useState } from 'preact/hooks';
 
 function Laiki() {
+
+
+    const [laiksData, setLaiksData] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const { url } = useLocation();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            setLoading(true);
+            try {
+                const [laiksResponse] = await Promise.all([
+                    axios.get('http://localhost:8000/api/laiks', config)
+                ]);
+
+                setLaiksData(laiksResponse.data || []);
+                setError(null);
+            } catch (err) {
+                console.error('API Error:', err.response?.data || err.message);
+                setError(err.message || 'Failed to fetch data');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div className="laikimain">
             <div className="pirmdiena">

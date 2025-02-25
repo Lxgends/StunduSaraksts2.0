@@ -48,10 +48,15 @@ main{
 }
 
 @media (max-width: 1500px) {
+    header a{
+		display: none;
+	}
+
     main {
         margin: 2rem;
         margin-right: 10rem;
         margin-left: 10rem;
+        margin-bottom: auto;
     }
     .titleb{
         font-size: 25px;
@@ -65,6 +70,11 @@ main{
 }
 
 @media (max-width: 640px) {
+
+    header a{
+		display: none;
+	}
+
     main {
         margin: 2rem;
     }

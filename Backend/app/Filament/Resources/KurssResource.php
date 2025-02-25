@@ -13,6 +13,14 @@ use Filament\Tables\Table;
 
 class KurssResource extends Resource
 {
+    public static function getModelLabel(): string{
+        return 'Pievienot Kursu';
+    }
+    
+    public static function getPluralModelLabel(): string{
+        return 'Pievienot Kursus';
+    }
+
     protected static ?string $model = Kurss::class;
 
     protected static ?string $navigationGroup = 'Personāla';
