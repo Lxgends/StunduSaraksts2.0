@@ -13,29 +13,37 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
 class DatumsResource extends Resource
 {
+
+    public static function getModelLabel(): string{
+        return 'Ieplānot nedēļas datumu';
+    }
+    
+    public static function getPluralModelLabel(): string{
+        return 'Ieplānot nedēļas datumus';
+    }
+
     protected static ?string $model = Datums::class;
 
     protected static ?string $navigationGroup = 'Stundas un Laiki';
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
-    protected static ?string $navigationLabel = 'Datumi';
+    protected static ?string $navigationLabel = 'Nedēļas Datums';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('PirmaisDatums')
+                Forms\Components\DatePicker::make('PirmaisDatums')
                     ->label('Nedēļas sākuma datums')
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
 
-                Forms\Components\TextInput::make('PedejaisDatums')
+                Forms\Components\DatePicker::make('PedejaisDatums')
                     ->label('Nedēļas beigu datums')
-                    ->required()
-                    ->maxLength(255)
+                    ->required(),
         ]);
     }
 

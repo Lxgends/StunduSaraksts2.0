@@ -34,6 +34,25 @@
     justify-content: center;
     display: flex;
 }
+
+#dropdown1{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 3px solid #282560;
+}
+
+#dropdown2{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 3px solid #282560;
+}
+
+#dropdown3{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 3px solid #282560;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;

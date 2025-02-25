@@ -51,8 +51,6 @@ header a.active {
 
 footer {
 	display: flex;
-	position: absolute;
-	bottom: 0;
 	justify-content: flex-end;
 	align-items: center;
 	background-color: #282560;
@@ -75,12 +73,6 @@ footer {
 @media (max-width: 639px) {
 	header a{
 		display: none;
-	}
-	main {
-		margin: 2rem;
-	}
-	footer{
-		bottom: auto;
 	}
 }
 

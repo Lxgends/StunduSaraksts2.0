@@ -10,22 +10,17 @@ class KurssController extends Controller
     public function index()
     {
         try {
-            // Try fetching the first course from the database
-            $kurss = Kurss::first();
+            $kursse = Kurss::all();
     
-            if (!$kurss) {
+            if ($kursse->isEmpty()) {
                 return response()->json(['message' => 'No courses found'], 404);
             }
-    
-            // Return the course data as JSON
-            return response()->json($kurss);
+
+            return response()->json($kursse);
         } catch (\Exception $e) {
-            // Log the error for debugging
-            \Log::error('Error fetching course: ' . $e->getMessage());
-    
-            // Return a 500 error if something goes wrong
+            \Log::error('Error fetching courses: ' . $e->getMessage());
+
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
-    
 }

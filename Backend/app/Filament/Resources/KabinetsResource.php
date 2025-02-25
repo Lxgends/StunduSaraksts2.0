@@ -12,9 +12,19 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Select;
 
 class KabinetsResource extends Resource
 {
+
+public static function getModelLabel(): string{
+        return 'Pievienot Kabinetu';
+    }
+    
+public static function getPluralModelLabel(): string{
+        return 'Pievienot Kabinetus';
+    }
+
     protected static ?string $model = Kabinets::class;
 
     protected static ?string $navigationGroup = 'Personāla';
@@ -27,15 +37,18 @@ class KabinetsResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('vieta')
-                    ->label('Skolas atrašanās vieta')
+                Select::make('vieta')
+                    ->label('Skola kurā atrodas kabinets')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'Cēsis' => 'Cēsis',
+                        'Priekuļi' => 'Priekuļi',
+                    ]),
 
                 Forms\Components\TextInput::make('skaitlis')
-                    ->label('Kabineta skaitlis')
+                    ->label('Kabineta numurs vai nosaukums')
                     ->required()
-                    ->maxLength(255)
+                    ->maxLength(20)
             ]);
     }
 
@@ -49,7 +62,7 @@ class KabinetsResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('skaitlis')
-                    ->label('Kabineta skaitlis')
+                    ->label('Kabineta numurs vai nosaukums')
                     ->sortable()
                     ->searchable(),
             ])
