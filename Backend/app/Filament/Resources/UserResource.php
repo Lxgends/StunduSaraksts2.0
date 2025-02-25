@@ -19,6 +19,15 @@ use Filament\Tables\Columns\TextColumn;
 
 class UserResource extends Resource
 {
+
+    public static function getModelLabel(): string{
+        return 'Pievienot Administratoru';
+    }
+    
+public static function getPluralModelLabel(): string{
+        return 'Pievienot Administratorus';
+    }
+
     protected static ?string $model = User::class;
 
     protected static ?string $navigationGroup = 'Administrācija';

@@ -13,7 +13,7 @@ class KabinetsController extends Controller
             $kabinets = Kabinets::all();
     
             if (!$kabinets) {
-                return response()->json(['message' => 'No courses found'], 404);
+                return response()->json(['message' => 'Neatrada nekādu kabinetu'], 404);
             }
 
             return response()->json($kabinets);

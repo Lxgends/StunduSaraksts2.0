@@ -17,13 +17,20 @@ use Filament\Tables\Columns\TextColumn;
 
 class LaiksResource extends Resource
 {
+    public static function getModelLabel(): string{
+        return 'Pievienot pārstundas laiku';
+    }
+    
+    public static function getPluralModelLabel(): string{
+        return 'Pievienot pārstundas laikus';
+    }
     protected static ?string $model = Laiks::class;
 
     protected static ?string $navigationGroup = 'Stundas un Laiki';
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?string $navigationLabel = 'Stundu Laiki';
+    protected static ?string $navigationLabel = 'Pārstundu Laiki';
 
     public static function form(Form $form): Form
     {
@@ -37,9 +44,7 @@ class LaiksResource extends Resource
                         'short' => 'Īsās stundas',
                     ]),
 
-
-
-                    TimePicker::make('sakumalaiks')
+                TimePicker::make('sakumalaiks')
                     ->label('Pārstundu sākuma laiks')
                     ->format('H:i')
                     ->seconds(false)
@@ -50,7 +55,6 @@ class LaiksResource extends Resource
                     ->format('H:i')
                     ->seconds(false)
                     ->required(),
-                
             ]);
     }
 
@@ -58,7 +62,7 @@ class LaiksResource extends Resource
     {
         return $table
             ->columns([
-                    TextColumn::make('DienasTips')
+                TextColumn::make('DienasTips')
                     ->label('Dienas garuma tips')
                     ->sortable()
                     ->searchable()
@@ -71,13 +75,12 @@ class LaiksResource extends Resource
                     ->label('Stundu sākuma laiks')
                     ->formatStateUsing(function ($state) {
                         return \Carbon\Carbon::parse($state)->format('H:i');
-                }),
+                    }),
                 TextColumn::make('beigulaiks')
                     ->label('Stundu beigu laiks')
                     ->formatStateUsing(function ($state) {
                         return \Carbon\Carbon::parse($state)->format('H:i');
-                }),
-
+                    }),
             ])
             ->filters([
                 //

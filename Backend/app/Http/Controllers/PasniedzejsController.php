@@ -13,7 +13,7 @@ class PasniedzejsController extends Controller
             $pasniedzejs = Pasniedzejs::all();
     
             if (!$pasniedzejs) {
-                return response()->json(['message' => 'No courses found'], 404);
+                return response()->json(['message' => 'Netika atrasti pasniedzēji'], 404);
             }
 
             return response()->json($pasniedzejs);

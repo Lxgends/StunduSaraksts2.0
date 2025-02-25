@@ -70,9 +70,5 @@ footer {
 	display: flex;
 	flex-direction: row;
 }
-@media (max-width: 639px) {
-	header a{
-		display: none;
-	}
-}
+
 

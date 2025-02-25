@@ -13,7 +13,7 @@ class KurssController extends Controller
             $kursse = Kurss::all();
     
             if ($kursse->isEmpty()) {
-                return response()->json(['message' => 'No courses found'], 404);
+                return response()->json(['message' => 'Netika atrasti kursi'], 404);
             }
 
             return response()->json($kursse);

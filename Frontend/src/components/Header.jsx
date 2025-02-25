@@ -27,54 +27,15 @@ export function Header() {
 
             setLoading(true);
             try {
-                // Adding more detailed error logging
-                const pasniedzejsPromise = axios.get('http://localhost:8000/api/pasniedzejs', config)
-                    .catch(err => {
-                        console.error('Failed to fetch pasniedzejs:', err);
-                        return { data: [] };
-                    });
-                
-                const kurssPromise = axios.get('http://localhost:8000/api/kurss', config)
-                    .catch(err => {
-                        console.error('Failed to fetch kurss:', err);
-                        return { data: [] };
-                    });
-                
-                const kabinetsPromise = axios.get('http://localhost:8000/api/kabinets', config)
-                    .catch(err => {
-                        console.error('Failed to fetch kabinets:', err);
-                        return { data: [] };
-                    });
-
                 const [pasniedzejsResponse, kurssResponse, kabinetsResponse] = await Promise.all([
-                    pasniedzejsPromise,
-                    kurssPromise,
-                    kabinetsPromise
+                    axios.get('http://localhost:8000/api/pasniedzejs', config),
+                    axios.get('http://localhost:8000/api/kurss', config),
+                    axios.get('http://localhost:8000/api/kabinets', config)
                 ]);
 
-                // Log the responses to help debug
-                console.log('Pasniedzejs Response:', pasniedzejsResponse.data);
-                console.log('Kurss Response:', kurssResponse.data);
-                console.log('Kabinets Response:', kabinetsResponse.data);
-
-                // Ensure we're working with arrays
-                const pasniedzejsArray = Array.isArray(pasniedzejsResponse.data) ? pasniedzejsResponse.data : 
-                                        (pasniedzejsResponse.data && Array.isArray(pasniedzejsResponse.data.data)) ? 
-                                        pasniedzejsResponse.data.data : [];
-                
-                const kurssArray = Array.isArray(kurssResponse.data) ? kurssResponse.data : 
-                                  (kurssResponse.data && Array.isArray(kurssResponse.data.data)) ? 
-                                  kurssResponse.data.data : [];
-                
-                const kabinetsArray = Array.isArray(kabinetsResponse.data) ? kabinetsResponse.data : 
-                                     (kabinetsResponse.data && Array.isArray(kabinetsResponse.data.data)) ? 
-                                     kabinetsResponse.data.data : [];
-
-                setPasniedzejsData(pasniedzejsArray);
-                setKurssData(kurssArray);
-                setKabinetsData(kabinetsArray);
-                
-                // Reset error state if successful
+                setPasniedzejsData(pasniedzejsResponse.data || []);
+                setKurssData(kurssResponse.data || []);
+                setKabinetsData(kabinetsResponse.data || []);
                 setError(null);
             } catch (err) {
                 console.error('API Error:', err.response?.data || err.message);
@@ -87,8 +48,6 @@ export function Header() {
         fetchData();
         setupDropdownCloseListener();
     }, []);
-    
-    console.log("Current state:", { pasniedzejsData, kurssData, kabinetsData, loading, error });
 
     return (
         <header>
@@ -112,7 +71,7 @@ export function Header() {
                                 <p>No courses available.</p>
                             ) : (
                                 kurssData.map((item, index) => (
-                                    <a key={item.Nosaukums || item.id || index} href={`/kurss/${encodeURIComponent(item.Nosaukums || item.id)}`}>
+                                    <a key={item.Nosaukums || item.id || index} href={`/kurss?=${encodeURIComponent(item.Nosaukums || item.id)}`}>
                                         {item.Nosaukums || "Unknown Course Name"}
                                     </a>
                                 ))
@@ -136,7 +95,7 @@ export function Header() {
                                 <p>No teachers available.</p>
                             ) : (
                                 pasniedzejsData.map((item, index) => (
-                                    <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs/${encodeURIComponent(item.Vards)}`}>
+                                    <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?=${encodeURIComponent(item.Vards)}`}>
                                         {item.Vards && item.Uzvards ? `${item.Vards.charAt(0)}. ${item.Uzvards}` : "Unknown Teacher"}
                                     </a>
                                 ))
@@ -160,7 +119,7 @@ export function Header() {
                                 <p>No rooms available.</p>
                             ) : (
                                 kabinetsData.map((item, index) => (
-                                    <a key={item.skaitlis || index} href={`/kabinets/${encodeURIComponent(item.skaitlis)}`}>
+                                    <a key={item.skaitlis || index} href={`/kabinets?=${encodeURIComponent(item.skaitlis)}`}>
                                         {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
                                     </a>
                                 ))
