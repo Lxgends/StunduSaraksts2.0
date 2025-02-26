@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 25, 2025 at 08:27 PM
+-- Generation Time: Feb 26, 2025 at 04:53 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -74,6 +74,7 @@ CREATE TABLE `ieplanot_stundu` (
   `datumsID` bigint(20) UNSIGNED NOT NULL,
   `stundaID` bigint(20) UNSIGNED NOT NULL,
   `pasniedzejsID` bigint(20) UNSIGNED NOT NULL,
+  `kabinetaID` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -82,9 +83,17 @@ CREATE TABLE `ieplanot_stundu` (
 -- Dumping data for table `ieplanot_stundu`
 --
 
-INSERT INTO `ieplanot_stundu` (`id`, `skaitlis`, `kurssID`, `laiksID`, `datumsID`, `stundaID`, `pasniedzejsID`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 1, 1, 1, '2025-02-25 12:57:53', '2025-02-25 13:04:37'),
-(2, 1, 2, 1, 1, 2, 2, '2025-02-25 13:15:55', '2025-02-25 13:15:55');
+INSERT INTO `ieplanot_stundu` (`id`, `skaitlis`, `kurssID`, `laiksID`, `datumsID`, `stundaID`, `pasniedzejsID`, `kabinetaID`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 1, 1, 1, 1, '2025-02-25 12:57:53', '2025-02-25 13:04:37'),
+(2, 1, 2, 1, 1, 2, 2, 1, '2025-02-25 13:15:55', '2025-02-25 13:15:55'),
+(3, 2, 1, 1, 1, 1, 3, 5, '2025-02-26 12:26:43', '2025-02-26 12:26:43'),
+(4, 2, 1, 2, 1, 1, 3, 7, '2025-02-26 12:27:19', '2025-02-26 12:27:19'),
+(5, 5, 1, 6, 1, 2, 2, 1, '2025-02-26 14:09:30', '2025-02-26 14:09:30'),
+(6, 5, 1, 7, 1, 2, 2, 1, '2025-02-26 14:09:56', '2025-02-26 14:09:56'),
+(7, 1, 1, 2, 1, 2, 3, 5, '2025-02-26 15:23:52', '2025-02-26 15:23:52'),
+(8, 1, 1, 3, 1, 1, 1, 1, '2025-02-26 15:24:10', '2025-02-26 15:24:10'),
+(9, 3, 1, 3, 1, 1, 1, 1, '2025-02-26 15:26:58', '2025-02-26 15:26:58'),
+(10, 3, 1, 1, 1, 1, 1, 1, '2025-02-26 16:42:22', '2025-02-26 16:42:22');
 
 -- --------------------------------------------------------
 
@@ -157,7 +166,7 @@ CREATE TABLE `laiks` (
 --
 
 INSERT INTO `laiks` (`id`, `DienasTips`, `sakumalaiks`, `beigulaiks`, `created_at`, `updated_at`) VALUES
-(1, 'normal', '08:30:00', '09:50:00', '2025-02-24 09:15:25', '2025-02-25 16:52:10'),
+(1, 'normal', '08:30:00', '09:50:00', '2025-02-24 09:15:25', '2025-02-25 21:04:01'),
 (2, 'normal', '10:10:00', '11:30:00', '2025-02-25 17:33:53', '2025-02-25 17:33:53'),
 (3, 'normal', '12:30:00', '13:50:00', '2025-02-25 19:44:47', '2025-02-25 20:15:19'),
 (4, 'normal', '14:00:00', '15:20:00', '2025-02-25 19:45:03', '2025-02-25 20:15:39'),
@@ -239,7 +248,7 @@ CREATE TABLE `pasniedzejs` (
 INSERT INTO `pasniedzejs` (`id`, `Vards`, `Uzvards`, `KabinetsID`, `created_at`, `updated_at`) VALUES
 (1, 'Jēkabs', 'Krīgerts', 1, '2025-02-24 08:20:45', '2025-02-24 08:31:16'),
 (2, 'Andris', 'Lapsiņš', 2, '2025-02-24 08:35:01', '2025-02-24 08:35:32'),
-(3, 'Kārlis Ivars', 'Braķis', 7, '2025-02-25 19:53:19', '2025-02-25 19:53:49');
+(3, 'Kārlis', 'Braķis', 7, '2025-02-25 19:53:19', '2025-02-26 16:25:06');
 
 -- --------------------------------------------------------
 
@@ -344,7 +353,8 @@ ALTER TABLE `ieplanot_stundu`
   ADD KEY `ieplanot_stundu_laiksid_foreign` (`laiksID`),
   ADD KEY `ieplanot_stundu_datumsid_foreign` (`datumsID`),
   ADD KEY `ieplanot_stundu_stundaid_foreign` (`stundaID`),
-  ADD KEY `ieplanot_stundu_pasniedzejsid_foreign` (`pasniedzejsID`);
+  ADD KEY `ieplanot_stundu_pasniedzejsid_foreign` (`pasniedzejsID`),
+  ADD KEY `ieplanot_stundu_kabinetaid_foreign` (`kabinetaID`);
 
 --
 -- Indexes for table `kabinets`
@@ -435,7 +445,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `ieplanot_stundu`
 --
 ALTER TABLE `ieplanot_stundu`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `kabinets`
@@ -453,7 +463,7 @@ ALTER TABLE `kurss`
 -- AUTO_INCREMENT for table `laiks`
 --
 ALTER TABLE `laiks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -500,6 +510,7 @@ ALTER TABLE `users`
 --
 ALTER TABLE `ieplanot_stundu`
   ADD CONSTRAINT `ieplanot_stundu_datumsid_foreign` FOREIGN KEY (`datumsID`) REFERENCES `datums` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `ieplanot_stundu_kabinetaid_foreign` FOREIGN KEY (`kabinetaID`) REFERENCES `kabinets` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `ieplanot_stundu_kurssid_foreign` FOREIGN KEY (`kurssID`) REFERENCES `kurss` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `ieplanot_stundu_laiksid_foreign` FOREIGN KEY (`laiksID`) REFERENCES `laiks` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `ieplanot_stundu_pasniedzejsid_foreign` FOREIGN KEY (`pasniedzejsID`) REFERENCES `pasniedzejs` (`id`) ON DELETE CASCADE,
