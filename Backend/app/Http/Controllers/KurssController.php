@@ -10,13 +10,13 @@ class KurssController extends Controller
     public function index()
     {
         try {
-            $kursse = Kurss::all();
+            $kurss = Kurss::all();
     
-            if ($kursse->isEmpty()) {
+            if ($kurss->isEmpty()) {
                 return response()->json(['message' => 'Netika atrasti kursi'], 404);
             }
 
-            return response()->json($kursse);
+            return response()->json($kurss);
         } catch (\Exception $e) {
             \Log::error('Error fetching courses: ' . $e->getMessage());
 

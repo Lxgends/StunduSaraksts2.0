@@ -1,4 +1,102 @@
-.kurssMain{
+
+
+.kurssMain {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    width: clamp(15rem, 100%, 50rem);
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.kurssMain p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.datums {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header{
+    color: #282560;
+}
+
+.kurssTable {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kurssTable h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stundas {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.skaitlis {
+    width: 30px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.laiks {
+    width: 150px;
+    font-size: 16px;
+    color: #555;
+}
+
+.stunda {
+    flex: 1;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.pasniedzejs {
+    width: 200px;
+    font-size: 16px;
+    color: #555;
+}
+
+.kabinets {
+    width: 100px;
+    font-size: 16px;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .kurssMain {
+        padding: 10px;
+    }
+
+    .stundas {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .skaitlis, .laiks, .stunda, .pasniedzejs, .kabinets {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
