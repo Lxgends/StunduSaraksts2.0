@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IeplanotStundu;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class IeplanotStunduController extends Controller
 {
@@ -35,5 +36,54 @@ class IeplanotStunduController extends Controller
             ->get();
 
         return response()->json($stundas);
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'skaitlis' => 'required|integer',
+            'kurssID' => 'required|exists:kursi,id',
+            'laiksID' => 'required|exists:laiks,id',
+            'pasniedzejsID' => 'required|exists:pasniedzejs,id',
+            'kabinetaID' => 'required|exists:kabinets,id',
+            'datumsID' => 'required|exists:datums,id',
+            'stundaID' => 'required|exists:stunda,id',
+            Rule::unique('ieplanot_stundas')->where(function ($query) use ($request) {
+                return $query->where('skaitlis', $request->skaitlis)
+                    ->where('kurssID', $request->kurssID)
+                    ->where('laiksID', $request->laiksID)
+                    ->where('pasniedzejsID', $request->pasniedzejsID)
+                    ->where('kabinetaID', $request->kabinetaID);
+            }),
+        ]);
+
+        $ieplanotStundu = IeplanotStundu::create($validatedData);
+
+        return response()->json($ieplanotStundu, 201);
+    }
+
+    public function update(Request $request, IeplanotStundu $ieplanotStundu)
+    {
+        $validatedData = $request->validate([
+            'skaitlis' => 'required|integer',
+            'kurssID' => 'required|exists:kursi,id',
+            'laiksID' => 'required|exists:laiks,id',
+            'pasniedzejsID' => 'required|exists:pasniedzejs,id',
+            'kabinetaID' => 'required|exists:kabinets,id',
+            'datumsID' => 'required|exists:datums,id',
+            'stundaID' => 'required|exists:stunda,id',
+            Rule::unique('ieplanot_stundas')->where(function ($query) use ($request, $ieplanotStundu) {
+                return $query->where('skaitlis', $request->skaitlis)
+                    ->where('kurssID', $request->kurssID)
+                    ->where('laiksID', $request->laiksID)
+                    ->where('pasniedzejsID', $request->pasniedzejsID)
+                    ->where('kabinetaID', $request->kabinetaID)
+                    ->where('id', '!=', $ieplanotStundu->id);
+            }),
+        ]);
+
+        $ieplanotStundu->update($validatedData);
+
+        return response()->json($ieplanotStundu);
     }
 }
