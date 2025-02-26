@@ -39,7 +39,7 @@ public static function getPluralModelLabel(): string{
         return $form
             ->schema([
                 Select::make('skaitlis')
-                    ->label('Skola kurā atrodas kabinets')
+                    ->label('Diena kurai paredzēta pārstunda')
                     ->required()
                     ->options([
                         '1' => 'Primdiena',
@@ -54,6 +54,7 @@ public static function getPluralModelLabel(): string{
                 Select::make('kurssID')
                 ->label('Kursa nosaukums')
                 ->required()
+                ->searchable()
                 ->options(function () {
                     return \App\Models\Kurss::pluck('Nosaukums', 'id')->toArray();
                 }),
@@ -61,9 +62,10 @@ public static function getPluralModelLabel(): string{
                 Select::make('laiksID')
                 ->label('Pārstundas laiks')
                 ->required()
+                ->searchable()
                 ->options(function () {
                     return \App\Models\Laiks::all()->mapWithKeys(function ($item) {
-                        return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];
+                        return [$item->id => $item->DienasTips . ' ' . $item->sakumalaiks . ' - ' . $item->beigulaiks];
                     })->toArray();
                 }),
                 
@@ -91,9 +93,20 @@ public static function getPluralModelLabel(): string{
                 Select::make('pasniedzejsID')
                 ->label('Stundas Pasniedzējs')
                 ->required()
+                ->searchable()
                 ->options(function () {
                     return \App\Models\Pasniedzejs::all()->mapWithKeys(function ($item) {
                         return [$item->id => $item->Vards . ' ' . $item->Uzvards];
+                    })->toArray();
+                }),
+
+                Select::make('kabinetaID')
+                ->label('Kabinets kurā notiek stunda')
+                ->required()
+                ->searchable()
+                ->options(function () {
+                    return \App\Models\Kabinets::all()->mapWithKeys(function ($item) {
+                        return [$item->id => $item->vieta . ' ' . $item->skaitlis];
                     })->toArray();
                 }),
                 

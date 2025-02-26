@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('datumsID');
             $table->unsignedBigInteger('stundaID');
             $table->unsignedBigInteger('pasniedzejsID');
+            $table->unsignedBigInteger('kabinetaID');
             $table->timestamps();
             
             $table->foreign('kurssID')->references('id')->on('kurss')->onDelete('cascade');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('datumsID')->references('id')->on('datums')->onDelete('cascade');
             $table->foreign('stundaID')->references('id')->on('stunda')->onDelete('cascade');
             $table->foreign('pasniedzejsID')->references('id')->on('pasniedzejs')->onDelete('cascade');
+            $table->foreign('kabinetaID')->references('id')->on('kabinets')->onDelete('cascade');
         });
     }
 

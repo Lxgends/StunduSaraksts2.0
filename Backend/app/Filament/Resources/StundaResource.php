@@ -16,6 +16,15 @@ use Filament\Tables\Columns\TextColumn;
 
 class StundaResource extends Resource
 {
+
+    public static function getModelLabel(): string{
+        return 'Pievienot mācību priekšmetu';	
+    }
+    
+    public static function getPluralModelLabel(): string{
+        return 'Pievienot mācību priekšmetus';
+    }
+
     protected static ?string $model = Stunda::class;
 
     protected static ?string $navigationGroup = 'Stundas un Laiki';

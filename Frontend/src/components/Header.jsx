@@ -71,7 +71,7 @@ export function Header() {
                                 <p>No courses available.</p>
                             ) : (
                                 kurssData.map((item, index) => (
-                                    <a key={item.Nosaukums || item.id || index} href={`/kurss?=${encodeURIComponent(item.Nosaukums || item.id)}`}>
+                                    <a key={item.Nosaukums || item.id || index} href={`/kurss?kurss=${encodeURIComponent(item.Nosaukums)}`}>
                                         {item.Nosaukums || "Unknown Course Name"}
                                     </a>
                                 ))
@@ -95,7 +95,7 @@ export function Header() {
                                 <p>No teachers available.</p>
                             ) : (
                                 pasniedzejsData.map((item, index) => (
-                                    <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?=${encodeURIComponent(item.Vards)}`}>
+                                    <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?name=${encodeURIComponent(item.Vards + ' ' + item.Uzvards)}`}>
                                         {item.Vards && item.Uzvards ? `${item.Vards.charAt(0)}. ${item.Uzvards}` : "Unknown Teacher"}
                                     </a>
                                 ))
@@ -119,7 +119,7 @@ export function Header() {
                                 <p>No rooms available.</p>
                             ) : (
                                 kabinetsData.map((item, index) => (
-                                    <a key={item.skaitlis || index} href={`/kabinets?=${encodeURIComponent(item.skaitlis)}`}>
+                                    <a key={item.skaitlis || index} href={`/kabinets?number=${encodeURIComponent(item.skaitlis)}`}>
                                         {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
                                     </a>
                                 ))

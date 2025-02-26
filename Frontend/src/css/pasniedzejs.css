@@ -1,5 +1,92 @@
-.pasniedzejsMain{
+/* Main container */
+.pasniedzejsMain {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Error message */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Loading message */
+.pasniedzejsMain p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Table container */
+.pasniedzejsTable {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Individual class container */
+.stundas {
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Class number */
+.skaitlis {
+    width: 30px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Class time */
+.laiks {
+    width: 150px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Class name */
+.stunda {
+    flex: 1;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Teacher name */
+.pasniedzejs {
+    width: 200px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Room number */
+.kabinets {
+    width: 100px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .pasniedzejsMain {
+        padding: 10px;
+    }
+
+    .stundas {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .skaitlis, .laiks, .stunda, .pasniedzejs, .kabinets {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
