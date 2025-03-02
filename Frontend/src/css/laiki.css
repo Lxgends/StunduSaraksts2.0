@@ -5,33 +5,32 @@
     justify-content: space-between;
 }
 
-.pirmdiena{
+.pirmdiena, .piektdiena{
     display: flex;
     flex-direction: column;
 }
 
-.piektdiena{
-    display: flex;
-    flex-direction: column;
-}
 .classTime{
     display: flex;
     flex-direction: row;
     font-size: 28px;
     text-align: justify;
 }
+
+.classTitle, .breakTitle{
+    color: #282560;
+}
+
 .classTitle{
     padding-right: 20px;
-    color: #282560;
 }
-.breakTitle{
-    color: #282560;
-}
+
 .pusdTime{
     display: flex;
     flex-direction: column;
     font-size: 28px;
 }
+
 .titleb{
     display: flex;
     justify-content: center;
@@ -41,55 +40,51 @@
 }
 
 @media (max-width: 1500px) {
-    header a{
-		display: none;
-	}
 
     main {
-        margin: 2rem;
-        margin-right: 10rem;
-        margin-left: 10rem;
         margin-bottom: auto;
         justify-content: center;
     }
+
     .titleb{
         font-size: 25px;
     }
-    .classTime{
-        font-size: 20px;
-    }
-    .pusdTime{
+
+    .classTime, .pusdTime{
         font-size: 20px;
     }
 }
 
 @media (max-width: 640px) {
-
     header a{
-		display: none;
-	}
+        display: none;
+    }
 
     main {
+        margin-right: 0;
+        margin-left: 0;
         margin: 2rem;
     }
+
     .laikimain{
-        display: flex;
+        width: auto;
         flex-direction: column;
     }
-    .piektdiena{
-        margin-top: 5rem;
-        margin-bottom: 5rem;
+
+    .pirmdiena, .piektdiena{
+        margin-top: 2rem;
+        margin-bottom: 2rem;
     }
-    .pirmdiena{
-        margin-top: 5rem;
-    }
+
     .titleb{
         font-size: 25px;
     }
-    .classTime{
-        font-size: 20px;
+
+    .classTime, .pusdTime{
+        font-size: 18px;
     }
-    .pusdTime{
-        font-size: 20px;
+
+    .classTitle{
+        padding-right: 10px;
     }
 }

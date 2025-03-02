@@ -61,7 +61,7 @@
     min-width: 230px;
     border: 1px solid #ddd;
     overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scrollbar */
+    overflow-x: hidden;
     z-index: 1;
 }
 
@@ -76,8 +76,37 @@
 
 .show {display:block;}
 
+.burger-menu {
+    display: none;
+}
+
 @media (max-width: 639px) {
     .dropbtn{
         display: none;
+    }
+
+    .burger-menu {
+        display: block;
+        font-size: 32px;
+        cursor: pointer;
+        color: #ffffff;
+        position: absolute;
+        right: 2rem;
+        top: 1.8rem;
+    }
+
+    .user-navigation {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #282560;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .user-navigation.show {
+        display: flex;
     }
 }

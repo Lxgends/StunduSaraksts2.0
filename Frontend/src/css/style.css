@@ -71,13 +71,34 @@ footer {
 	font-size: 38px;
 	font-family: sans-serif;
 }
-.admin-buttons{
-	display: flex;
-	flex-direction: row;
-}
 .user-navigation{
 	display: flex;
 	flex-direction: row;
 }
+.datuma-selector{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
 
+.dateButton{
+    background-color: transparent;
+    box-shadow: none;
+    color: black;
+    font-size: 20px;
+    
+}
 
+@media (max-width: 1500px) {
+	main{
+		margin-left: 5rem;
+		margin-right: 5rem;
+	}
+}
+
+@media (max-width: 640px) {
+	main{
+		margin-left: 0;
+		margin-right: 0;
+	}
+}

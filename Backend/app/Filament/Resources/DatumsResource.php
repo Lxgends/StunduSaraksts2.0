@@ -31,7 +31,7 @@ class DatumsResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
-    protected static ?string $navigationLabel = 'Nedēļas Datums';
+    protected static ?string $navigationLabel = 'Nedēļas Datumi';
 
     public static function form(Form $form): Form
     {
