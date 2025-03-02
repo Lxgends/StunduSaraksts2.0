@@ -8,32 +8,41 @@ import Laiki from './pages/laiki.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './css/style.css';
 import axios from 'axios';
+import { useEffect } from 'preact/hooks';
 
 axios.defaults.withCredentials = true;
 
 export function App() {
-	return (
-		<LocationProvider>
-			<Header />
-			<main>
-				<Router>
-					<Route path="/" component={Laiki} />
-					<Route path="/pasniedzejs" component={Pasniedzejs} />
-					<Route path="/kabinets" component={Kabinets} />
-					<Route path="/kurss" component={Kursusaraksts} />
-					<Route default component={NotFound} />
-				</Router>
-			</main>
-			<Footer />
-		</LocationProvider>
+    useEffect(() => {
+        if (window.location.pathname === '/') {
+            const lastOpenedCourse = localStorage.getItem('lastOpenedCourse');
+            if (lastOpenedCourse) {
+                window.location.href = `/kurss?kurss=${lastOpenedCourse}`;
+            }
+        }
+    }, []);
 
-	);
+    return (
+        <LocationProvider>
+            <Header />
+            <main>
+                <Router>
+                    <Route path="/" component={Laiki} />
+                    <Route path="/pasniedzejs" component={Pasniedzejs} />
+                    <Route path="/kabinets" component={Kabinets} />
+                    <Route path="/kurss" component={Kursusaraksts} />
+                    <Route default component={NotFound} />
+                </Router>
+            </main>
+            <Footer />
+        </LocationProvider>
+    );
 }
 
 if (typeof window !== 'undefined') {
-	hydrate(<App />, document.getElementById('app'));
+    hydrate(<App />, document.getElementById('app'));
 }
 
 export async function prerender(data) {
-	return await ssr(<App {...data} />);
+    return await ssr(<App {...data} />);
 }

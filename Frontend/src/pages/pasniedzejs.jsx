@@ -11,20 +11,15 @@ function Pasniedzejs() {
     const [loading, setLoading] = useState(true);
     const [laiksList, setLaiksList] = useState([]);
     const [kabinetsList, setKabinetsList] = useState([]);
+    const [datumaID, setDatumaID] = useState(1);
+    const [allDatums, setAllDatums] = useState([]);
 
     const queryString = window.location.search;
-    console.log('Query String:', queryString);
     const queryParams = new URLSearchParams(queryString);
     const teacherName = queryParams.get('name');
-    console.log('Query Params:', queryParams.toString());
-    console.log('teacherName:', teacherName);
 
     useEffect(() => {
-        console.log('useEffect triggered');
-        console.log('teacherName inside useEffect:', teacherName);
-
         const fetchData = async () => {
-            console.log('fetchData started');
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -36,14 +31,14 @@ function Pasniedzejs() {
 
             setLoading(true);
             try {
-                const [stundasResponse, laiksResponse, kabinetsResponse] = await Promise.all([
-                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?pasniedzejs=${encodeURIComponent(teacherName)}`, config),
+                const [stundasResponse, laiksResponse, kabinetsResponse, datumsResponse] = await Promise.all([
+                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?pasniedzejs=${encodeURIComponent(teacherName)}&datumsID=${datumaID}`, config),
                     axios.get(`http://localhost:8000/api/laiks`, config),
-                    axios.get(`http://localhost:8000/api/kabinets`, config)
+                    axios.get(`http://localhost:8000/api/kabinets`, config),
+                    axios.get(`http://localhost:8000/api/datums`, config)
                 ]);
 
                 const data = stundasResponse.data || [];
-                console.log('Stundas API Response:', data);
                 setStundasData(data);
 
                 if (data.length > 0 && data[0].datums) {
@@ -51,12 +46,13 @@ function Pasniedzejs() {
                 }
 
                 const laiksData = laiksResponse.data || [];
-                console.log('Laiks API Response:', laiksData);
                 setLaiksList(laiksData);
 
                 const kabinetsData = kabinetsResponse.data || [];
-                console.log('Kabinets API Response:', kabinetsData);
                 setKabinetsList(kabinetsData);
+
+                const datumsData = datumsResponse.data || [];
+                setAllDatums(datumsData);
 
                 setError(null);
             } catch (err) {
@@ -64,16 +60,13 @@ function Pasniedzejs() {
                 setError(err.message || 'Failed to fetch data');
             } finally {
                 setLoading(false);
-                console.log('fetchData finished');
             }
         };
 
         if (teacherName) {
             fetchData();
-        } else {
-            console.log('teacherName is null or undefined');
         }
-    }, [teacherName]);
+    }, [teacherName, datumaID]);
 
     const getLaiksInfo = (laiksID) => {
         const laiks = laiksList.find(l => l.id === laiksID);
@@ -122,7 +115,7 @@ function Pasniedzejs() {
     const groupedStundasData = groupByDayNumber(stundasData);
 
     const renderClasses = (classes) => {
-        const maxClasses = 5; // Assuming there are 5 classes per day
+        const maxClasses = 5;
         const renderedClasses = [];
 
         for (let i = 1; i <= maxClasses; i++) {
@@ -171,29 +164,57 @@ function Pasniedzejs() {
         return renderedClasses;
     };
 
+    const handlePreviousWeek = () => {
+        setDatumaID(prevID => {
+            const currentIndex = allDatums.findIndex(d => d.id === prevID);
+            return currentIndex > 0 ? allDatums[currentIndex - 1].id : prevID;
+        });
+    };
+
+    const handleNextWeek = () => {
+        setDatumaID(prevID => {
+            const currentIndex = allDatums.findIndex(d => d.id === prevID);
+            return currentIndex < allDatums.length - 1 ? allDatums[currentIndex + 1].id : prevID;
+        });
+    };
+
+    const teacher = stundasData.length > 0 ? stundasData[0].pasniedzejs : null;
+
     return (
         <div className="pasniedzejsMain">
             {error && <div className="error-message">Error: {error}</div>}
             {loading ? (
                 <p>Ielādē...</p>
             ) : (
-                <div className="pasniedzejsTable">
-                    {datums && (
+                <>
+                    <div className="header">
+                        {teacher && (
+                            <h2>{teacher.Vards} {teacher.Uzvards} Nedēļas grafiks</h2>
+                        )}
+                    </div>
+                    <div className="datuma-selector">
+                        <button onClick={handlePreviousWeek} className='dateButton'>&larr;</button>
+                        {datums && (
                         <div className="datums">
                             <strong>Nedēļas datums: {moment(datums.PirmaisDatums).format('YYYY-MM-DD')} - {moment(datums.PedejaisDatums).format('YYYY-MM-DD')}</strong>
                         </div>
-                    )}
-                    {stundasData.length === 0 ? (
-                        <p>Nav ieplānotu stundu.</p>
-                    ) : (
-                        groupedStundasData.map((group, groupIndex) => (
-                            <div key={groupIndex}>
-                                <h3>{group.day}</h3>
-                                {renderClasses(group.classes)}
-                            </div>
-                        ))
-                    )}
-                </div>
+                        )}
+                        <button onClick={handleNextWeek} className='dateButton'>&rarr;</button>
+                    </div>
+
+                    <div className="pasniedzejsTable">
+                        {stundasData.length === 0 ? (
+                            <p>Nav ieplānotu stundu.</p>
+                        ) : (
+                            groupedStundasData.map((group, groupIndex) => (
+                                <div key={groupIndex}>
+                                    <h3>{group.day}</h3>
+                                    {renderClasses(group.classes)}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </>
             )}
         </div>
     );

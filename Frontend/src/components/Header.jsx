@@ -1,9 +1,10 @@
 import { useLocation } from 'preact-iso';
 import { useEffect, useState } from 'preact/hooks';
 import axios from 'axios';
-import { myDropdown, dropdownFunction, setupDropdownCloseListener } from './DropdownComponent.jsx';
+import { myDropdown, dropdownFunction, setupDropdownCloseListener, closeAllDropdowns } from './DropdownComponent.jsx';
 import logo from '../assets/logo.svg';
 import '../css/dropdown.css';
+import '../css/style.css';
 
 export function Header() {
     const [pasniedzejsData, setPasniedzejsData] = useState([]);
@@ -11,6 +12,7 @@ export function Header() {
     const [kabinetsData, setKabinetsData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const { url } = useLocation();
 
@@ -49,87 +51,97 @@ export function Header() {
         setupDropdownCloseListener();
     }, []);
 
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+        if (!menuOpen) {
+            document.getElementById('burgerDropdown').classList.add('show');
+        } else {
+            closeAllDropdowns();
+        }
+    };
+
     return (
         <header>
             <img src={logo} className="image" alt="VTDT Logo" />
             {error && <div className="error-message">Error: {error}</div>}
-            <nav>
-                <div className="user-navigation">
-                    <div className="dropdown">
-                        <button onClick={() => myDropdown('dropdown1')} className="dropbtn">Kurss</button>
-                        <div id="dropdown1" className="dropdown-content">
-                            <input
-                                type="text"
-                                placeholder="Meklēt.."
-                                id="myInput1"
-                                className="myInput"
-                                onKeyUp={() => dropdownFunction('myInput1', 'dropdown1')}
-                            />
-                            {loading ? (
-                                <p>Ielādē...</p>
-                            ) : kurssData.length === 0 ? (
-                                <p>No courses available.</p>
-                            ) : (
-                                kurssData.map((item, index) => (
-                                    <a key={item.Nosaukums || item.id || index} href={`/kurss?kurss=${encodeURIComponent(item.Nosaukums)}`}>
-                                        {item.Nosaukums || "Unknown Course Name"}
-                                    </a>
-                                ))
-                            )}
-                        </div>
+            <div className="burger-menu" onClick={toggleMenu}>
+                &#9776;
+            </div>
+            <nav className={`user-navigation ${menuOpen ? 'show' : ''}`} id="burgerDropdown">
+                <div className="dropdown">
+                    <button onClick={() => myDropdown('dropdown1')} className="dropbtn">Kurss</button>
+                    <div id="dropdown1" className="dropdown-content">
+                        <input
+                            type="text"
+                            placeholder="Meklēt.."
+                            id="myInput1"
+                            className="myInput"
+                            onKeyUp={() => dropdownFunction('myInput1', 'dropdown1')}
+                        />
+                        {loading ? (
+                            <p>Ielādē...</p>
+                        ) : kurssData.length === 0 ? (
+                            <p>No courses available.</p>
+                        ) : (
+                            kurssData.map((item, index) => (
+                                <a key={item.Nosaukums || item.id || index} href={`/kurss?kurss=${encodeURIComponent(item.Nosaukums)}`}>
+                                    {item.Nosaukums || "Unknown Course Name"}
+                                </a>
+                            ))
+                        )}
                     </div>
-
-                    <div className="dropdown">
-                        <button onClick={() => myDropdown('dropdown2')} className="dropbtn">Pasniedzējs</button>
-                        <div id="dropdown2" className="dropdown-content">
-                            <input
-                                type="text"
-                                placeholder="Meklēt.."
-                                id="myInput2"
-                                className="myInput"
-                                onKeyUp={() => dropdownFunction('myInput2', 'dropdown2')}
-                            />
-                            {loading ? (
-                                <p>Ielādē...</p>
-                            ) : pasniedzejsData.length === 0 ? (
-                                <p>No teachers available.</p>
-                            ) : (
-                                pasniedzejsData.map((item, index) => (
-                                    <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?name=${encodeURIComponent(item.Vards + ' ' + item.Uzvards)}`}>
-                                        {item.Vards && item.Uzvards ? `${item.Vards.charAt(0)}. ${item.Uzvards}` : "Unknown Teacher"}
-                                    </a>
-                                ))
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="dropdown">
-                        <button onClick={() => myDropdown('dropdown3')} className="dropbtn">Kabinets</button>
-                        <div id="dropdown3" className="dropdown-content">
-                            <input
-                                type="text"
-                                placeholder="Meklēt.."
-                                id="myInput3"
-                                className="myInput"
-                                onKeyUp={() => dropdownFunction('myInput3', 'dropdown3')}
-                            />
-                            {loading ? (
-                                <p>Ielādē...</p>
-                            ) : kabinetsData.length === 0 ? (
-                                <p>No rooms available.</p>
-                            ) : (
-                                kabinetsData.map((item, index) => (
-                                    <a key={item.skaitlis || index} href={`/kabinets?number=${encodeURIComponent(item.skaitlis)}`}>
-                                        {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
-                                    </a>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                    <a href="/" className={url === '/' ? 'active' : ''} style={{ fontWeight: 'bold' }}>
-                        Stundu Laiki
-                    </a>
                 </div>
+
+                <div className="dropdown">
+                    <button onClick={() => myDropdown('dropdown2')} className="dropbtn">Pasniedzējs</button>
+                    <div id="dropdown2" className="dropdown-content">
+                        <input
+                            type="text"
+                            placeholder="Meklēt.."
+                            id="myInput2"
+                            className="myInput"
+                            onKeyUp={() => dropdownFunction('myInput2', 'dropdown2')}
+                        />
+                        {loading ? (
+                            <p>Ielādē...</p>
+                        ) : pasniedzejsData.length === 0 ? (
+                            <p>No teachers available.</p>
+                        ) : (
+                            pasniedzejsData.map((item, index) => (
+                                <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?name=${encodeURIComponent(item.Vards + ' ' + item.Uzvards)}`}>
+                                    {item.Vards && item.Uzvards ? `${item.Vards.charAt(0)}. ${item.Uzvards}` : "Unknown Teacher"}
+                                </a>
+                            ))
+                        )}
+                    </div>
+                </div>
+
+                <div className="dropdown">
+                    <button onClick={() => myDropdown('dropdown3')} className="dropbtn">Kabinets</button>
+                    <div id="dropdown3" className="dropdown-content">
+                        <input
+                            type="text"
+                            placeholder="Meklēt.."
+                            id="myInput3"
+                            className="myInput"
+                            onKeyUp={() => dropdownFunction('myInput3', 'dropdown3')}
+                        />
+                        {loading ? (
+                            <p>Ielādē...</p>
+                        ) : kabinetsData.length === 0 ? (
+                            <p>No rooms available.</p>
+                        ) : (
+                            kabinetsData.map((item, index) => (
+                                <a key={item.skaitlis || index} href={`/kabinets?number=${encodeURIComponent(item.skaitlis)}`}>
+                                    {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
+                                </a>
+                            ))
+                        )}
+                    </div>
+                </div>
+                <a href="/" className={url === '/' ? 'active' : ''} style={{ fontWeight: 'bold' }}>
+                    Stundu Laiki
+                </a>
             </nav>
         </header>
     );

@@ -11,20 +11,15 @@ function Kabinets() {
     const [loading, setLoading] = useState(true);
     const [laiksList, setLaiksList] = useState([]);
     const [kabinetsList, setKabinetsList] = useState([]);
+    const [datumaID, setDatumaID] = useState(1);
+    const [allDatums, setAllDatums] = useState([]);
 
     const queryString = window.location.search;
-    console.log('Query String:', queryString);
     const queryParams = new URLSearchParams(queryString);
     const kabinetsNumber = queryParams.get('number');
-    console.log('Query Params:', queryParams.toString());
-    console.log('kabinetsNumber:', kabinetsNumber);
 
     useEffect(() => {
-        console.log('useEffect triggered');
-        console.log('kabinetsNumber inside useEffect:', kabinetsNumber);
-
         const fetchData = async () => {
-            console.log('fetchData started');
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -36,14 +31,14 @@ function Kabinets() {
 
             setLoading(true);
             try {
-                const [stundasResponse, laiksResponse, kabinetsResponse] = await Promise.all([
-                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?kabinets=${encodeURIComponent(kabinetsNumber)}`, config),
+                const [stundasResponse, laiksResponse, kabinetsResponse, datumsResponse] = await Promise.all([
+                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?kabinets=${encodeURIComponent(kabinetsNumber)}&datumsID=${datumaID}`, config),
                     axios.get(`http://localhost:8000/api/laiks`, config),
-                    axios.get(`http://localhost:8000/api/kabinets`, config)
+                    axios.get(`http://localhost:8000/api/kabinets`, config),
+                    axios.get(`http://localhost:8000/api/datums`, config)
                 ]);
 
                 const data = stundasResponse.data || [];
-                console.log('Stundas API Response:', data);
                 setStundasData(data);
 
                 if (data.length > 0 && data[0].datums) {
@@ -51,12 +46,13 @@ function Kabinets() {
                 }
 
                 const laiksData = laiksResponse.data || [];
-                console.log('Laiks API Response:', laiksData);
                 setLaiksList(laiksData);
 
                 const kabinetsData = kabinetsResponse.data || [];
-                console.log('Kabinets API Response:', kabinetsData);
                 setKabinetsList(kabinetsData);
+
+                const datumsData = datumsResponse.data || [];
+                setAllDatums(datumsData);
 
                 setError(null);
             } catch (err) {
@@ -64,16 +60,13 @@ function Kabinets() {
                 setError(err.message || 'Failed to fetch data');
             } finally {
                 setLoading(false);
-                console.log('fetchData finished');
             }
         };
 
         if (kabinetsNumber) {
             fetchData();
-        } else {
-            console.log('kabinetsNumber is null or undefined');
         }
-    }, [kabinetsNumber]);
+    }, [kabinetsNumber, datumaID]);
 
     const getLaiksInfo = (laiksID) => {
         const laiks = laiksList.find(l => l.id === laiksID);
@@ -171,29 +164,57 @@ function Kabinets() {
         return renderedClasses;
     };
 
+    const handlePreviousWeek = () => {
+        setDatumaID(prevID => {
+            const currentIndex = allDatums.findIndex(d => d.id === prevID);
+            return currentIndex > 0 ? allDatums[currentIndex - 1].id : prevID;
+        });
+    };
+
+    const handleNextWeek = () => {
+        setDatumaID(prevID => {
+            const currentIndex = allDatums.findIndex(d => d.id === prevID);
+            return currentIndex < allDatums.length - 1 ? allDatums[currentIndex + 1].id : prevID;
+        });
+    };
+
+    const kabinet = kabinetsList.find(k => k.Skaitlis === kabinetsNumber);
+
     return (
         <div className="kabinetsMain">
             {error && <div className="error-message">Error: {error}</div>}
             {loading ? (
                 <p>Ielādē...</p>
             ) : (
-                <div className="kabinetsTable">
-                    {datums && (
+                <>
+                    <div className="header">
+                        {kabinet && (
+                            <h2>Nedēļas grafiks mācību stundām kas notiek: {kabinet.Skaitlis} {kabinet.Vieta} </h2>
+                        )}
+                    </div>
+                    <div className="datuma-selector">
+                        <button onClick={handlePreviousWeek} className='dateButton'>&larr;</button>
+                        {datums && (
                         <div className="datums">
                             <strong>Nedēļas datums: {moment(datums.PirmaisDatums).format('YYYY-MM-DD')} - {moment(datums.PedejaisDatums).format('YYYY-MM-DD')}</strong>
                         </div>
-                    )}
-                    {stundasData.length === 0 ? (
-                        <p>Nav ieplānotu stundu.</p>
-                    ) : (
-                        groupedStundasData.map((group, groupIndex) => (
-                            <div key={groupIndex}>
-                                <h3>{group.day}</h3>
-                                {renderClasses(group.classes)}
-                            </div>
-                        ))
-                    )}
-                </div>
+                        )}
+                        <button onClick={handleNextWeek} className='dateButton'>&rarr;</button>
+                    </div>
+
+                    <div className="kabinetsTable">
+                        {stundasData.length === 0 ? (
+                            <p>Nav ieplānotu stundu.</p>
+                        ) : (
+                            groupedStundasData.map((group, groupIndex) => (
+                                <div key={groupIndex}>
+                                    <h3>{group.day}</h3>
+                                    {renderClasses(group.classes)}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </>
             )}
         </div>
     );

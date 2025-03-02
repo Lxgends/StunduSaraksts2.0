@@ -11,20 +11,19 @@ export function Kursusaraksts() {
     const [loading, setLoading] = useState(true);
     const [laiksList, setLaiksList] = useState([]);
     const [kabinetsList, setKabinetsList] = useState([]);
+    const [datumaID, setDatumaID] = useState(1);
+    const [allDatums, setAllDatums] = useState([]);
 
     const queryString = window.location.search;
-    console.log('Query String:', queryString);
     const queryParams = new URLSearchParams(queryString);
     const kurssName = queryParams.get('kurss');
-    console.log('Query Params:', queryParams.toString());
-    console.log('kurssName:', kurssName);
 
     useEffect(() => {
-        console.log('useEffect triggered');
-        console.log('kurssName inside useEffect:', kurssName);
+        if (kurssName) {
+            localStorage.setItem('lastOpenedCourse', kurssName);
+        }
 
         const fetchData = async () => {
-            console.log('fetchData started');
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -36,14 +35,14 @@ export function Kursusaraksts() {
 
             setLoading(true);
             try {
-                const [stundasResponse, laiksResponse, kabinetsResponse] = await Promise.all([
-                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?kurss=${encodeURIComponent(kurssName)}`, config),
+                const [stundasResponse, laiksResponse, kabinetsResponse, datumsResponse] = await Promise.all([
+                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?kurss=${encodeURIComponent(kurssName)}&datumsID=${datumaID}`, config),
                     axios.get(`http://localhost:8000/api/laiks`, config),
-                    axios.get(`http://localhost:8000/api/kabinets`, config)
+                    axios.get(`http://localhost:8000/api/kabinets`, config),
+                    axios.get(`http://localhost:8000/api/datums`, config)
                 ]);
 
                 const data = stundasResponse.data || [];
-                console.log('Stundas API Response:', data);
                 setStundasData(data);
 
                 if (data.length > 0 && data[0].datums) {
@@ -51,12 +50,13 @@ export function Kursusaraksts() {
                 }
 
                 const laiksData = laiksResponse.data || [];
-                console.log('Laiks API Response:', laiksData);
                 setLaiksList(laiksData);
 
                 const kabinetsData = kabinetsResponse.data || [];
-                console.log('Kabinets API Response:', kabinetsData);
                 setKabinetsList(kabinetsData);
+
+                const datumsData = datumsResponse.data || [];
+                setAllDatums(datumsData);
 
                 setError(null);
             } catch (err) {
@@ -64,16 +64,13 @@ export function Kursusaraksts() {
                 setError(err.message || 'Failed to fetch data');
             } finally {
                 setLoading(false);
-                console.log('fetchData finished');
             }
         };
 
         if (kurssName) {
             fetchData();
-        } else {
-            console.log('kurssName is null or undefined');
         }
-    }, [kurssName]);
+    }, [kurssName, datumaID]);
 
     const getLaiksInfo = (laiksID) => {
         const laiks = laiksList.find(l => l.id === laiksID);
@@ -171,6 +168,20 @@ export function Kursusaraksts() {
         return renderedClasses;
     };
 
+    const handlePreviousWeek = () => {
+        setDatumaID(prevID => {
+            const currentIndex = allDatums.findIndex(d => d.id === prevID);
+            return currentIndex > 0 ? allDatums[currentIndex - 1].id : prevID;
+        });
+    };
+
+    const handleNextWeek = () => {
+        setDatumaID(prevID => {
+            const currentIndex = allDatums.findIndex(d => d.id === prevID);
+            return currentIndex < allDatums.length - 1 ? allDatums[currentIndex + 1].id : prevID;
+        });
+    };
+
     return (
         <div className="kurssMain">
             {error && <div className="error-message">Error: {error}</div>}
@@ -181,11 +192,16 @@ export function Kursusaraksts() {
                     <div className="header">
                         <h2>{kurssName} Nedēļas grafiks</h2>
                     </div>
-                    {datums && (
+                    <div className="datuma-selector">
+                        <button onClick={handlePreviousWeek} className='dateButton'>&larr;</button>
+                        {datums && (
                         <div className="datums">
                             <strong>Nedēļas datums: {moment(datums.PirmaisDatums).format('YYYY-MM-DD')} - {moment(datums.PedejaisDatums).format('YYYY-MM-DD')}</strong>
                         </div>
-                    )}
+                        )}
+                        <button onClick={handleNextWeek} className='dateButton'>&rarr;</button>
+                    </div>
+
                     <div className="kurssTable">
                         {stundasData.length === 0 ? (
                             <p>Nav ieplānotu stundu.</p>

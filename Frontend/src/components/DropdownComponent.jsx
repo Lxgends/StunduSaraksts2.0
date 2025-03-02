@@ -6,10 +6,7 @@ export function closeAllDropdowns() {
 }
 
 export function myDropdown(dropdownId) {
-    // First, close all dropdowns
     closeAllDropdowns();
-
-    // Then toggle the clicked dropdown
     const currentDropdown = document.getElementById(dropdownId);
     if (!currentDropdown.classList.contains("show")) {
         currentDropdown.classList.add("show");
