@@ -27,7 +27,7 @@ class StundaResource extends Resource
 
     protected static ?string $model = Stunda::class;
 
-    protected static ?string $navigationGroup = 'Stundas un Laiki';
+    protected static ?string $navigationGroup = 'Izglītības pārvaldība';
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 

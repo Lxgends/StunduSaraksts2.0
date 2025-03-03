@@ -1,16 +1,19 @@
-/* Dropdown Button */
 .dropbtn {
     display: flex;
     align-items: center;
     font-weight: bold;
     color: white;
-    background-color: transparent;
-    padding: 0.75rem;
-    font-size: 32px;
+    background-color: #282560;
+    height: 80px;
+    padding: 16px;
+    font-size: 16px;
     border: none;
     cursor: pointer;
 }
-.dropbtn:active{
+.dropbtn:active {
+    background-color: #0005;
+}
+.dropbtn:hover, .dropbtn:focus {
     background-color: #0005;
 }
 
@@ -26,43 +29,39 @@
     border-bottom: 1px solid #ddd;
 }
 
-.myInput:focus {outline: 3px solid #ddd;}
+.myInput:focus {
+    outline: 3px solid #ddd;
+}
 
 .dropdown {
     position: relative;
     justify-content: center;
     display: flex;
+    flex-direction: column;
 }
 
-#dropdown1{
+#dropdown1, #dropdown2, #dropdown3 {
+    position: absolute;
+    top: 100%;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border: 3px solid #282560;
-}
-
-#dropdown2{
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border: 3px solid #282560;
-}
-
-#dropdown3{
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border: 3px solid #282560;
+    max-height: 200px;
+    width: 300px;
+    overflow-y: auto;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 6.5rem;
-    max-height: 200px;
-    background-color: #f6f6f6;
-    min-width: 230px;
-    border: 1px solid #ddd;
-    overflow-y: auto;
-    overflow-x: hidden;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+}
+
+.dropdown.show .dropdown-content {
+    display: block;
 }
 
 .dropdown-content a {
@@ -72,17 +71,45 @@
     display: block;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
 
-.show {display:block;}
+.show {
+    display: block;
+}
 
 .burger-menu {
     display: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 10px;
 }
 
-@media (max-width: 639px) {
-    .dropbtn{
-        display: none;
+.user-navigation{
+	display: flex;
+	flex-direction: row;
+}
+
+@media (max-width: 650px) {
+
+    #dropdown1, #dropdown2, #dropdown3 {
+        width: 100%;
+    }
+
+    .myInput {
+        width: 100%;
+    }
+
+    .dropbtn {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .dropdown {
+        display: flex;
+        width: 100%;
     }
 
     .burger-menu {
@@ -91,8 +118,7 @@
         cursor: pointer;
         color: #ffffff;
         position: absolute;
-        right: 2rem;
-        top: 1.8rem;
+        right: 1rem;
     }
 
     .user-navigation {
@@ -101,9 +127,10 @@
         width: 100%;
         background-color: #282560;
         position: fixed;
-        top: 60px;
+        top: 4rem;
         left: 0;
         z-index: 1000;
+        align-items: flex-start;
     }
 
     .user-navigation.show {

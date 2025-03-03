@@ -11,7 +11,7 @@ export function Kursusaraksts() {
     const [loading, setLoading] = useState(true);
     const [laiksList, setLaiksList] = useState([]);
     const [kabinetsList, setKabinetsList] = useState([]);
-    const [datumaID, setDatumaID] = useState(1);
+    const [datumaID, setDatumaID] = useState(null);
     const [allDatums, setAllDatums] = useState([]);
 
     const queryString = window.location.search;
@@ -45,18 +45,22 @@ export function Kursusaraksts() {
                 const data = stundasResponse.data || [];
                 setStundasData(data);
 
-                if (data.length > 0 && data[0].datums) {
-                    setDatums(data[0].datums);
+                const datumsData = datumsResponse.data || [];
+                setAllDatums(datumsData);
+
+                if (!datumaID && datumsData.length > 0) {
+                    const latestDatumaID = Math.max(...datumsData.map(d => d.id));
+                    setDatumaID(latestDatumaID);
                 }
+
+                const currentDatums = datumsData.find(d => d.id === datumaID);
+                setDatums(currentDatums || null);
 
                 const laiksData = laiksResponse.data || [];
                 setLaiksList(laiksData);
 
                 const kabinetsData = kabinetsResponse.data || [];
                 setKabinetsList(kabinetsData);
-
-                const datumsData = datumsResponse.data || [];
-                setAllDatums(datumsData);
 
                 setError(null);
             } catch (err) {

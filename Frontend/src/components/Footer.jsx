@@ -7,6 +7,7 @@ export function Footer() {
         <div>
             <footer>
                 <b><a href="https://www.vtdt.lv/" className="titlep" >Vidzemes Tehnoloģiju un dizaina tehnikums</a></b>
+                <b><a href="https://www.vtdt.lv/" className="titlep-mobile" >VTDT</a></b>
                 <img src={logo} className="image" alt="VTDT Logo"></img>
             </footer>
         </div>

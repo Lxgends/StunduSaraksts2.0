@@ -23,16 +23,16 @@ class IeplanotStunduResource extends Resource
 }
 
 public static function getPluralModelLabel(): string{
-    return 'Ieplānot Stundas';
+    return 'Ieplānot Pārstundas';
 }
 
-    
     protected static ?string $model = IeplanotStundu::class;
-    protected static ?string $navigationGroup = 'Administrācija';
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationGroup = 'Nedēļas Grafiks';
 
-    protected static ?string $navigationLabel = 'Ieplānot stundas';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+
+    protected static ?string $navigationLabel = 'Ieplānot pārstundas';
 
     public static function form(Form $form): Form
     {
@@ -47,8 +47,6 @@ public static function getPluralModelLabel(): string{
                         '3' => 'Trešdiena',
                         '4' => 'Ceturtdiena',
                         '5' => 'Piektdiena',
-                        '6' => 'Sestdiena',
-                        '7' => 'Svētdiena',
                     ]),
 
                 Select::make('kurssID')

@@ -23,9 +23,9 @@ class KurssResource extends Resource
 
     protected static ?string $model = Kurss::class;
 
-    protected static ?string $navigationGroup = 'Personāla';
+    protected static ?string $navigationGroup = 'Izglītības pārvaldība';
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     protected static ?string $navigationLabel = 'Skolēnu kursi';
 

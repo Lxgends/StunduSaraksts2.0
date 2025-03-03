@@ -13,6 +13,7 @@
 .image{
 	margin: 10px;
 	margin-left: 20px;
+	height: 50px;
 }
 
 main{
@@ -20,8 +21,10 @@ main{
     margin-right: 20rem;
     margin-top: 2rem;
     margin-bottom: auto;
+	margin-top: auto;
     text-align: center;
     display: flex;
+	align-items: center;
     justify-content: center;
 }
 
@@ -37,13 +40,14 @@ body {
 
 header {
 	display: flex;
+	height: auto;
 	justify-content: flex-start;
 	background-color: #282560;
 }
 
 header nav {
 	display: flex;
-	font-size: 32px;
+	font-size: 16px;
 }
 
 header a {
@@ -58,6 +62,17 @@ header a.active {
 	background-color: #0005;
 }
 
+header a:hover {
+	background-color: #0005;
+}
+
+.header-logo{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 76px;
+}
+
 footer {
 	display: flex;
 	justify-content: flex-end;
@@ -66,15 +81,21 @@ footer {
 	width: 100%;
 }
 .titlep{
+	display: flex;
 	text-decoration: none;
 	color: white;
-	font-size: 38px;
+	font-size: 16px;
 	font-family: sans-serif;
 }
-.user-navigation{
-	display: flex;
-	flex-direction: row;
+
+.titlep-mobile{
+	display: none;
+	text-decoration: none;
+	color: white;
+	font-size: 16px;
+	font-family: sans-serif;
 }
+
 .datuma-selector{
     display: flex;
     justify-content: center;
@@ -100,5 +121,13 @@ footer {
 	main{
 		margin-left: 0;
 		margin-right: 0;
+	}
+	
+	.titlep{
+		display: none;
+	}
+
+	.titlep-mobile{
+		display: flex;
 	}
 }

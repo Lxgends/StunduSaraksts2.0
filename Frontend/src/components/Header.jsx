@@ -60,9 +60,16 @@ export function Header() {
         }
     };
 
+    const handleDropdownItemClick = () => {
+        setMenuOpen(false);
+        closeAllDropdowns();
+    };
+
     return (
         <header>
-            <img src={logo} className="image" alt="VTDT Logo" />
+            <div className="header-logo">
+                <img src={logo} className="image" alt="VTDT Logo" />
+            </div>
             {error && <div className="error-message">Error: {error}</div>}
             <div className="burger-menu" onClick={toggleMenu}>
                 &#9776;
@@ -84,7 +91,7 @@ export function Header() {
                             <p>No courses available.</p>
                         ) : (
                             kurssData.map((item, index) => (
-                                <a key={item.Nosaukums || item.id || index} href={`/kurss?kurss=${encodeURIComponent(item.Nosaukums)}`}>
+                                <a key={item.Nosaukums || item.id || index} href={`/kurss?kurss=${encodeURIComponent(item.Nosaukums)}`} onClick={handleDropdownItemClick}>
                                     {item.Nosaukums || "Unknown Course Name"}
                                 </a>
                             ))
@@ -108,7 +115,7 @@ export function Header() {
                             <p>No teachers available.</p>
                         ) : (
                             pasniedzejsData.map((item, index) => (
-                                <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?name=${encodeURIComponent(item.Vards + ' ' + item.Uzvards)}`}>
+                                <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?name=${encodeURIComponent(item.Vards + ' ' + item.Uzvards)}`} onClick={handleDropdownItemClick}>
                                     {item.Vards && item.Uzvards ? `${item.Vards.charAt(0)}. ${item.Uzvards}` : "Unknown Teacher"}
                                 </a>
                             ))
@@ -132,7 +139,7 @@ export function Header() {
                             <p>No rooms available.</p>
                         ) : (
                             kabinetsData.map((item, index) => (
-                                <a key={item.skaitlis || index} href={`/kabinets?number=${encodeURIComponent(item.skaitlis)}`}>
+                                <a key={item.skaitlis || index} href={`/kabinets?number=${encodeURIComponent(item.skaitlis)}`} onClick={handleDropdownItemClick}>
                                     {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
                                 </a>
                             ))
