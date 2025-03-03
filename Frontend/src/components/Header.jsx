@@ -13,6 +13,7 @@ export function Header() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
 
     const { url } = useLocation();
 
@@ -51,6 +52,15 @@ export function Header() {
         setupDropdownCloseListener();
     }, []);
 
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+        localStorage.setItem('darkMode', darkMode);
+    }, [darkMode]);
+
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
         if (!menuOpen) {
@@ -63,6 +73,10 @@ export function Header() {
     const handleDropdownItemClick = () => {
         setMenuOpen(false);
         closeAllDropdowns();
+    };
+
+    const toggleDarkMode = () => {
+        setDarkMode(!darkMode);
     };
 
     return (
@@ -148,6 +162,9 @@ export function Header() {
                 </div>
                 <a href="/" className={url === '/' ? 'active' : ''} style={{ fontWeight: 'bold' }}>
                     Stundu Laiki
+                </a>
+                <a onClick={toggleDarkMode} className="dark-mode-toggle">
+                    {darkMode ? 'Light Mode' : 'Dark Mode'}
                 </a>
             </nav>
         </header>
