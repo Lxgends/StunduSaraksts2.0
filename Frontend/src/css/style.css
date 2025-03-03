@@ -32,6 +32,30 @@ body {
 	margin: 0;
 }
 
+/* Dark mode styles */
+.dark-mode-toggle {
+	cursor: pointer;
+	font-weight: bold;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-mode .dropdown-content {
+    background-color: #2c2c2c;
+}
+
+body.dark-mode .dropdown-content a {
+    color: #ffffff;
+}
+
+body.dark-mode .dropdown-content a:hover {
+    background-color: #3a3a3a;
+}
+
+
 #app {
 	display: flex;
 	flex-direction: column;
@@ -103,11 +127,25 @@ footer {
 }
 
 .dateButton{
-    background-color: transparent;
-    box-shadow: none;
-    color: black;
+    background-color: #282560;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
     font-size: 20px;
-    
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+	margin: 5px;
+}
+
+.dateButton:hover {
+    background-color: #1f1b4d;
+    transform: scale(1.05);
+}
+
+.dateButton:active {
+    background-color: #16133a;
+    transform: scale(0.95);
 }
 
 @media (max-width: 1500px) {

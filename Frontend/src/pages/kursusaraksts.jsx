@@ -19,10 +19,6 @@ export function Kursusaraksts() {
     const kurssName = queryParams.get('kurss');
 
     useEffect(() => {
-        if (kurssName) {
-            localStorage.setItem('lastOpenedCourse', kurssName);
-        }
-
         const fetchData = async () => {
             const token = localStorage.getItem('token');
             const config = {
@@ -200,7 +196,8 @@ export function Kursusaraksts() {
                         <button onClick={handlePreviousWeek} className='dateButton'>&larr;</button>
                         {datums && (
                         <div className="datums">
-                            <strong>Nedēļas datums: {moment(datums.PirmaisDatums).format('YYYY-MM-DD')} - {moment(datums.PedejaisDatums).format('YYYY-MM-DD')}</strong>
+                            <strong>Nedēļas datums: </strong>
+                            <strong>{moment(datums.PirmaisDatums).format('YYYY-MM-DD')} - {moment(datums.PedejaisDatums).format('YYYY-MM-DD')}</strong>
                         </div>
                         )}
                         <button onClick={handleNextWeek} className='dateButton'>&rarr;</button>

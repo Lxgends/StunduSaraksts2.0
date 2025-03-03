@@ -25,38 +25,6 @@
     gap: 10px;
 }
 
-
-.skaitlis {
-    width: 30px;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.laiks {
-    width: 150px;
-    font-size: 16px;
-    color: #555;
-}
-
-.stunda {
-    flex: 1;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.pasniedzejs {
-    width: 200px;
-    font-size: 16px;
-    color: #555;
-}
-
-.kabinets {
-    width: 100px;
-    font-size: 16px;
-    color: #555;
-}
-
 @media (max-width: 768px) {
     .pasniedzejsMain {
         padding: 10px;
