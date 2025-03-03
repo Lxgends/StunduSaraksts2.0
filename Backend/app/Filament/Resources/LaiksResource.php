@@ -26,7 +26,7 @@ class LaiksResource extends Resource
     }
     protected static ?string $model = Laiks::class;
 
-    protected static ?string $navigationGroup = 'Stundas un Laiki';
+    protected static ?string $navigationGroup = 'Datumi un pārstundu laiki';
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 

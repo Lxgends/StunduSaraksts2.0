@@ -27,9 +27,9 @@ public static function getPluralModelLabel(): string{
 
     protected static ?string $model = Kabinets::class;
 
-    protected static ?string $navigationGroup = 'Personāla';
+    protected static ?string $navigationGroup = 'Izglītības pārvaldība';
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
     protected static ?string $navigationLabel = 'Skolas Kabineti';
 

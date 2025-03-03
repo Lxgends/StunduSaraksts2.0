@@ -11,7 +11,7 @@ function Kabinets() {
     const [loading, setLoading] = useState(true);
     const [laiksList, setLaiksList] = useState([]);
     const [kabinetsList, setKabinetsList] = useState([]);
-    const [datumaID, setDatumaID] = useState(1);
+    const [datumaID, setDatumaID] = useState(null);
     const [allDatums, setAllDatums] = useState([]);
 
     const queryString = window.location.search;
@@ -41,18 +41,22 @@ function Kabinets() {
                 const data = stundasResponse.data || [];
                 setStundasData(data);
 
-                if (data.length > 0 && data[0].datums) {
-                    setDatums(data[0].datums);
+                const datumsData = datumsResponse.data || [];
+                setAllDatums(datumsData);
+
+                if (!datumaID && datumsData.length > 0) {
+                    const latestDatumaID = Math.max(...datumsData.map(d => d.id));
+                    setDatumaID(latestDatumaID);
                 }
+
+                const currentDatums = datumsData.find(d => d.id === datumaID);
+                setDatums(currentDatums || null);
 
                 const laiksData = laiksResponse.data || [];
                 setLaiksList(laiksData);
 
                 const kabinetsData = kabinetsResponse.data || [];
                 setKabinetsList(kabinetsData);
-
-                const datumsData = datumsResponse.data || [];
-                setAllDatums(datumsData);
 
                 setError(null);
             } catch (err) {
@@ -67,6 +71,13 @@ function Kabinets() {
             fetchData();
         }
     }, [kabinetsNumber, datumaID]);
+
+    useEffect(() => {
+        if (allDatums.length > 0 && !datumaID) {
+            const latestDatumaID = Math.max(...allDatums.map(d => d.id));
+            setDatumaID(latestDatumaID);
+        }
+    }, [allDatums]);
 
     const getLaiksInfo = (laiksID) => {
         const laiks = laiksList.find(l => l.id === laiksID);
@@ -97,6 +108,9 @@ function Kabinets() {
         if (!kabinetInfo) return "Unknown Room";
         if (kabinetInfo.vieta === "Cēsis") {
             return `C. ${kabinetInfo.skaitlis}`;
+        }
+        if (kabinetInfo.vieta === "Priekuļi") {
+            return `P. ${kabinetInfo.skaitlis}`;
         }
         return kabinetInfo.vieta ? 
             `${kabinetInfo.skaitlis} (${kabinetInfo.vieta})` : 
@@ -178,7 +192,7 @@ function Kabinets() {
         });
     };
 
-    const kabinet = kabinetsList.find(k => k.Skaitlis === kabinetsNumber);
+    const kabinet = kabinetsList.find(k => k.skaitlis === kabinetsNumber);
 
     return (
         <div className="kabinetsMain">
@@ -189,7 +203,7 @@ function Kabinets() {
                 <>
                     <div className="header">
                         {kabinet && (
-                            <h2>Nedēļas grafiks mācību stundām kas notiek: {kabinet.Skaitlis} {kabinet.Vieta} </h2>
+                            <h2>Nedēļas grafiks mācību stundām kas notiek: {kabinet.vieta} {kabinet.skaitlis} </h2>
                         )}
                     </div>
                     <div className="datuma-selector">
