@@ -26,6 +26,8 @@
     font-size: 16px;
     padding: 14px 20px 12px 45px;
     border: none;
+    width: 100%;
+    color: white;
     border-bottom: 1px solid #ddd;
 }
 
