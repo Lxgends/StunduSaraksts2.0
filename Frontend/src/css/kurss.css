@@ -1,5 +1,3 @@
-
-
 .kurssMain {
     display: flex;
     flex-direction: column;
@@ -29,10 +27,14 @@
     margin-bottom: 10px;
     font-size: clamp(8px, 4vw, 18px);
     font-weight: bold;
+    color: #282560;
 }
 
-.header{
+.header {
     color: #282560;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .kurssTable {
@@ -46,42 +48,56 @@
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
+    color: #282560;
 }
 
 .stundas {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 5px;
+    padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stundas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .skaitlis {
     width: 30px;
     font-weight: bold;
     font-size: 16px;
+    color: #282560;
 }
 
 .laiks {
     width: 150px;
     font-size: 16px;
+    color: #282560;
 }
 
 .stunda {
     flex: 1;
     font-size: 16px;
     font-weight: bold;
+    color: #282560;
 }
 
 .pasniedzejs {
     width: 200px;
     font-size: 16px;
+    color: #282560;
 }
 
 .kabinets {
     width: 100px;
     font-size: 16px;
+    color: #282560;
 }
 
 @media (max-width: 768px) {
@@ -99,7 +115,27 @@
         margin-bottom: 5px;
     }
 
-    .datums{
+    .datums {
         width: 15rem;
     }
+}
+
+/* Dark mode styles for kurss */
+
+body.dark-mode .datums, body.dark-mode .header, body.dark-mode .kurssTable h3 {
+    color: white;
+}
+
+body.dark-mode .stundas {
+    background: #2c2c2c;
+    border: 1px solid #444444;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .stundas:hover {
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .skaitlis, body.dark-mode .laiks, body.dark-mode .stunda, body.dark-mode .pasniedzejs, body.dark-mode .kabinets {
+    color: white ;
 }
