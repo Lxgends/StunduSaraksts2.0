@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('datums', function (Blueprint $table) {
             $table->id();
-            $table->text('PirmaisDatums');
-            $table->text('PedejaisDatums');
+            $table->date('PirmaisDatums');
+            $table->date('PedejaisDatums');
             $table->timestamps();
         });
     }
