@@ -19,12 +19,12 @@ use Filament\Forms\Components\TextInput;
 class IeplanotStunduResource extends Resource
 {
     public static function getModelLabel(): string{
-    return 'Ieplānot Stundu';
-}
+        return 'Ieplānot Stundu';
+    }
 
-public static function getPluralModelLabel(): string{
-    return 'Ieplānot Pārstundas';
-}
+    public static function getPluralModelLabel(): string{
+        return 'Ieplānot Pārstundas';
+    }
 
     protected static ?string $model = IeplanotStundu::class;
 
@@ -35,29 +35,34 @@ public static function getPluralModelLabel(): string{
     protected static ?string $navigationLabel = 'Ieplānot pārstundas';
 
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Select::make('skaitlis')
-                    ->label('Diena kurai paredzēta pārstunda')
-                    ->required()
-                    ->options([
-                        '1' => 'Primdiena',
-                        '2' => 'Otrdiena',
-                        '3' => 'Trešdiena',
-                        '4' => 'Ceturtdiena',
-                        '5' => 'Piektdiena',
-                    ]),
+{
+    return $form
+        ->schema([
+            Select::make('skaitlis')
+                ->label('Diena kurai paredzēta pārstunda')
+                ->required()
+                ->options([
+                    '1' => 'Primdiena',
+                    '2' => 'Otrdiena',
+                    '3' => 'Trešdiena',
+                    '4' => 'Ceturtdiena',
+                    '5' => 'Piektdiena',
+                ]),
 
-                Select::make('kurssID')
+            Select::make('kurssID')
                 ->label('Kursa nosaukums')
                 ->required()
                 ->searchable()
                 ->options(function () {
                     return \App\Models\Kurss::pluck('Nosaukums', 'id')->toArray();
+                })
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) {
+                    $set('stundaID', null);
+                    $set('pasniedzejsID', null);
                 }),
 
-                Select::make('laiksID')
+            Select::make('laiksID')
                 ->label('Pārstundas laiks')
                 ->required()
                 ->searchable()
@@ -66,9 +71,8 @@ public static function getPluralModelLabel(): string{
                         return [$item->id => $item->DienasTips . ' ' . $item->sakumalaiks . ' - ' . $item->beigulaiks];
                     })->toArray();
                 }),
-                
 
-                Select::make('datumsID')
+            Select::make('datumsID')
                 ->label('Nedēļas datums')
                 ->required()
                 ->searchable()
@@ -77,28 +81,75 @@ public static function getPluralModelLabel(): string{
                         return [$item->id => $item->PirmaisDatums . ' - ' . $item->PedejaisDatums];
                     })->toArray();
                 }),
-                
-                
 
-                Select::make('stundaID')
+            Select::make('stundaID')
                 ->label('Stundas nosaukums')
                 ->required()
                 ->searchable()
-                ->options(function () {
+                ->options(function (callable $get) {
+                    $kurssID = $get('kurssID');
+                    
+                    if ($kurssID) {
+                        $stundaIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
+                            ->where('daudzums', '>', 0)
+                            ->distinct('stundaID')
+                            ->pluck('stundaID')
+                            ->toArray();
+                            
+                        return \App\Models\Stunda::whereIn('id', $stundaIDs)
+                            ->pluck('Nosaukums', 'id')
+                            ->toArray();
+                    }
+                    
                     return \App\Models\Stunda::pluck('Nosaukums', 'id')->toArray();
+                })
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) {
+                    $set('pasniedzejsID', null);
                 }),
 
-                Select::make('pasniedzejsID')
+            Select::make('pasniedzejsID')
                 ->label('Stundas Pasniedzējs')
                 ->required()
                 ->searchable()
-                ->options(function () {
+                ->options(function (callable $get) {
+                    $kurssID = $get('kurssID');
+                    $stundaID = $get('stundaID');
+                    
+                    if ($kurssID && $stundaID) {
+                        $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
+                            ->where('stundaID', $stundaID)
+                            ->where('daudzums', '>', 0)
+                            ->pluck('pasniedzejsID')
+                            ->toArray();
+                            
+                        return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                return [$item->id => $item->Vards . ' ' . $item->Uzvards];
+                            })
+                            ->toArray();
+                    } elseif ($kurssID) {
+                        $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
+                            ->where('daudzums', '>', 0)
+                            ->distinct('pasniedzejsID')
+                            ->pluck('pasniedzejsID')
+                            ->toArray();
+                            
+                        return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                return [$item->id => $item->Vards . ' ' . $item->Uzvards];
+                            })
+                            ->toArray();
+                    }
+                    
                     return \App\Models\Pasniedzejs::all()->mapWithKeys(function ($item) {
                         return [$item->id => $item->Vards . ' ' . $item->Uzvards];
                     })->toArray();
                 }),
 
-                Select::make('kabinetaID')
+            Select::make('kabinetaID')
                 ->label('Kabinets kurā notiek stunda')
                 ->required()
                 ->searchable()
@@ -107,51 +158,46 @@ public static function getPluralModelLabel(): string{
                         return [$item->id => $item->vieta . ' ' . $item->skaitlis];
                     })->toArray();
                 }),
-                
-                
-
-            ]);
-    }
+        ]);
+}
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-
                 TextColumn::make('skaitlis')
-                ->label('Nedēļas diena')
-                ->sortable()
-                ->searchable()
-                ->formatStateUsing(fn ($state) => [
-                    '1' => 'Primdiena',
-                    '2' => 'Otrdiena',
-                    '3' => 'Trešdiena',
-                    '4' => 'Ceturtdiena',
-                    '5' => 'Piektdiena',
-                    '6' => 'Sestdiena',
-                    '7' => 'Svētdiena',
-                ][$state] ?? 'Unknown'),
-            
+                    ->label('Nedēļas diena')
+                    ->sortable()
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => [
+                        '1' => 'Primdiena',
+                        '2' => 'Otrdiena',
+                        '3' => 'Trešdiena',
+                        '4' => 'Ceturtdiena',
+                        '5' => 'Piektdiena',
+                        '6' => 'Sestdiena',
+                        '7' => 'Svētdiena',
+                    ][$state] ?? 'Unknown'),
 
                 TextColumn::make('kurssID')
-                ->label('Kursa nosaukums')
-                ->sortable()
-                ->searchable()
-                ->getStateUsing(function ($record) {
-                    if ($record->kurssID) {
-                        return $record->Kurss()->pluck('Nosaukums')->first();
-                    }
-                }),
+                    ->label('Kursa nosaukums')
+                    ->sortable()
+                    ->searchable()
+                    ->getStateUsing(function ($record) {
+                        if ($record->kurssID) {
+                            return $record->Kurss()->pluck('Nosaukums')->first();
+                        }
+                    }),
 
                 TextColumn::make('datumsID')
-                ->label('Nedēļas sākuma datums')
-                ->sortable()
-                ->searchable()
-                ->getStateUsing(function ($record) {
-                    if ($record->datumsID) {
-                        return $record->Datums()->pluck('PirmaisDatums')->first();
-                    }
-                }),
+                    ->label('Nedēļas sākuma datums')
+                    ->sortable()
+                    ->searchable()
+                    ->getStateUsing(function ($record) {
+                        if ($record->datumsID) {
+                            return $record->Datums()->pluck('PirmaisDatums')->first();
+                        }
+                    }),
 
                 TextColumn::make('laiksID')
                     ->label('Pārstundas sākuma laiks')
@@ -162,9 +208,9 @@ public static function getPluralModelLabel(): string{
                             return $record->laiks()->pluck('sakumalaiks', 'beigulaiks')->first();
                         }
                     }),
-                
+
                 TextColumn::make('stundaID')
-                ->label('Stundas nosaukums')
+                    ->label('Stundas nosaukums')
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(function ($record) {
@@ -172,9 +218,9 @@ public static function getPluralModelLabel(): string{
                             return $record->stunda()->pluck('Nosaukums')->first();
                         }
                     }),
-                
+
                 TextColumn::make('pasniedzejsID')
-                ->label('Stundas Pasniedzējs')
+                    ->label('Stundas Pasniedzējs')
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(function ($record) {
@@ -193,6 +239,7 @@ public static function getPluralModelLabel(): string{
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                
             ]);
     }
 
