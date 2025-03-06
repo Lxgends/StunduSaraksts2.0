@@ -1,19 +1,19 @@
 :root {
-	font-weight: 400;
-	font-family: sans-serif;
-	color: #222;
-	background-color: #ffffff;
+    font-weight: 400;
+    font-family: sans-serif;
+    color: #222;
+    background-color: #ffffff;
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
 }
 .image{
-	margin: 10px;
-	margin-left: 20px;
-	height: 50px;
+    margin: 10px;
+    margin-left: 20px;
+    height: 50px;
 }
 
 main{
@@ -21,21 +21,21 @@ main{
     margin-right: 20rem;
     margin-top: 2rem;
     margin-bottom: auto;
-	margin-top: auto;
+    margin-top: auto;
     text-align: center;
     display: flex;
-	align-items: center;
+    align-items: center;
     justify-content: center;
 }
 
 body {
-	margin: 0;
+    margin: 0;
 }
 
 /* Dark mode styles */
 .dark-mode-toggle {
-	cursor: pointer;
-	font-weight: bold;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 body.dark-mode {
@@ -57,67 +57,74 @@ body.dark-mode .dropdown-content a:hover {
 
 
 #app {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
-	display: flex;
-	height: auto;
-	justify-content: flex-start;
-	background-color: #282560;
+    display: flex;
+    height: auto;
+    justify-content: flex-start;
+    background-color: #282560;
 }
 
 header nav {
-	display: flex;
-	font-size: 16px;
+    display: flex;
+    font-size: 16px;
 }
 
 header a {
-	display: flex;
+    display: flex;
 	align-items: center;
-	color: #ffffff;
-	padding: 0.75rem;
-	text-decoration: none;
+	padding: 10px 10px;
+	justify-content: center;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 header a.active {
-	background-color: #0005;
+    background-color: #0005;
 }
 
 header a:hover {
-	background-color: #0005;
+    background-color: #0005;
 }
 
 .header-logo{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 76px;
 }
 
 footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #282560;
+    width: 100%;
+}
+
+.buttonContainer{
 	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	background-color: #282560;
-	width: 100%;
+	position: relative;
+	justify-content: center;
 }
 .titlep{
-	display: flex;
-	text-decoration: none;
-	color: white;
-	font-size: 16px;
-	font-family: sans-serif;
+    display: flex;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-family: sans-serif;
 }
 
 .titlep-mobile{
-	display: none;
-	text-decoration: none;
-	color: white;
-	font-size: 16px;
-	font-family: sans-serif;
+    display: none;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-family: sans-serif;
 }
 
 .datuma-selector{
@@ -135,7 +142,7 @@ footer {
     font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-	margin: 5px;
+    margin: 5px;
 }
 
 .dateButton:hover {
@@ -149,23 +156,44 @@ footer {
 }
 
 @media (max-width: 1500px) {
-	main{
-		margin-left: 5rem;
-		margin-right: 5rem;
-	}
+    main{
+        margin-left: 5rem;
+        margin-right: 5rem;
+    }
 }
 
 @media (max-width: 640px) {
-	main{
-		margin-left: 0;
-		margin-right: 0;
-	}
-	
-	.titlep{
-		display: none;
-	}
+    main{
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .titlep{
+        display: none;
+    }
 
-	.titlep-mobile{
+    .titlep-mobile{
+        display: flex;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header a {
 		display: flex;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+
+    }
+	.buttonContainer{
+		display: flex;
+		position: relative;
+		justify-content: center;
+		width: 100%;
+		height: 80px;
 	}
 }

@@ -97,10 +97,15 @@
 
     #dropdown1, #dropdown2, #dropdown3 {
         width: 100%;
+        border: none;
     }
 
     .myInput {
         width: 100%;
+    }
+
+    .dropdown-content a {
+        padding-top: 5px;
     }
 
     .dropbtn {
@@ -136,5 +141,11 @@
 
     .user-navigation.show {
         display: flex;
+    }
+
+    .dropdown-content a {
+        padding: 0;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
     }
 }

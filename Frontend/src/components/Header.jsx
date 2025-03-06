@@ -1,5 +1,5 @@
 import { useLocation } from 'preact-iso';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState, useRef } from 'preact/hooks';
 import axios from 'axios';
 import { myDropdown, dropdownFunction, setupDropdownCloseListener, closeAllDropdowns } from './DropdownComponent.jsx';
 import logo from '../assets/logo.svg';
@@ -15,6 +15,7 @@ export function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
 
+    const headerRef = useRef(null);
     const { url } = useLocation();
 
     useEffect(() => {
@@ -50,6 +51,21 @@ export function Header() {
 
         fetchData();
         setupDropdownCloseListener();
+
+        // Add click outside listener
+        const handleClickOutside = (event) => {
+            if (headerRef.current && !headerRef.current.contains(event.target)) {
+                setMenuOpen(false);
+                closeAllDropdowns();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Cleanup event listener
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, []);
 
     useEffect(() => {
@@ -80,7 +96,7 @@ export function Header() {
     };
 
     return (
-        <header>
+        <header ref={headerRef}>
             <div className="header-logo">
                 <img src={logo} className="image" alt="VTDT Logo" />
             </div>
@@ -160,12 +176,16 @@ export function Header() {
                         )}
                     </div>
                 </div>
-                <a href="/" className={url === '/' ? 'active' : ''} style={{ fontWeight: 'bold' }}>
-                    Stundu Laiki
-                </a>
-                <a onClick={toggleDarkMode} className="dark-mode-toggle">
-                    {darkMode ? 'Light Mode' : 'Dark Mode'}
-                </a>
+                <div className="buttonContainer">
+                    <a href="/" className={url === '/' ? 'active' : ''} style={{ fontWeight: 'bold' }}>
+                        Stundu Laiki
+                    </a>
+                </div>
+                <div className="buttonContainer">
+                    <a onClick={toggleDarkMode} className="dark-mode-toggle">
+                        {darkMode ? 'Light Mode' : 'Dark Mode'}
+                    </a>
+                </div>
             </nav>
         </header>
     );

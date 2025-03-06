@@ -56,10 +56,6 @@
 }
 
 @media (max-width: 640px) {
-    header a{
-        display: none;
-    }
-
     main {
         margin-right: 0;
         margin-left: 0;
