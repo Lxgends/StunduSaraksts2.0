@@ -1,11 +1,15 @@
-
 .pasniedzejsMain {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: clamp(15rem, 100%, 50rem);
+    margin-top: 2rem;
     margin-bottom: 2rem;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .error-message {
@@ -25,13 +29,100 @@
     gap: 10px;
 }
 
+.pasniedzejsTable h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #282560;
+}
+
+.stundas {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stundas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.skaitlis {
+    width: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #282560;
+}
+
+.laiks {
+    width: 150px;
+    font-size: 16px;
+    color: #282560;
+}
+
+.stunda {
+    flex: 1;
+    font-size: 16px;
+    font-weight: bold;
+    color: #282560;
+}
+
+.pasniedzejs {
+    width: 200px;
+    font-size: 16px;
+    color: #282560;
+}
+
+.kabinets {
+    width: 100px;
+    font-size: 16px;
+    color: #282560;
+}
+
 @media (max-width: 768px) {
     .pasniedzejsMain {
         padding: 10px;
+    }
+
+    .stundas {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .skaitlis, .laiks, .stunda, .pasniedzejs, .kabinets {
         width: 100%;
         margin-bottom: 5px;
     }
+}
+
+/* Dark mode styles for pasniedzejs */
+
+body.dark-mode .pasniedzejsMain {
+    background-color: #2c2c2c;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .pasniedzejsTable h3 {
+    color: white;
+}
+
+body.dark-mode .stundas {
+    background: #2c2c2c;
+    border: 1px solid #444444;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .stundas:hover {
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .skaitlis, body.dark-mode .laiks, body.dark-mode .stunda, body.dark-mode .pasniedzejs, body.dark-mode .kabinets {
+    color: white;
 }
