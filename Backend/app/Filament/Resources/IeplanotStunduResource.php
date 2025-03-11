@@ -99,108 +99,111 @@ class IeplanotStunduResource extends Resource
             ]);
     }
 
-    private static function getDayScheduleFields(int $dayNumber): array 
-    {
-        return [
-            Repeater::make("day_{$dayNumber}_lessons")
-                ->label('Dienas Pārstundas')
-                ->reactive()
-                ->maxItems($dayNumber == 5 ? 5 : 5)
-                ->schema([
-                    Select::make('laiksID')
-                        ->label('Stundas laiks')
-                        ->required()
-                        ->searchable()
-                        ->options(function () use ($dayNumber) {
-                            return \App\Models\Laiks::where('DienasTips', $dayNumber == 5 ? 'short' : 'normal')
+private static function getDayScheduleFields(int $dayNumber): array 
+{
+    return [
+        Repeater::make("day_{$dayNumber}_lessons")
+            ->label('Dienas Pārstundas')
+            ->reactive()
+            ->maxItems($dayNumber == 5 ? 5 : 5)
+            ->schema([
+                Forms\Components\Hidden::make('skaitlis')
+                    ->default($dayNumber),
+                
+                Select::make('laiksID')
+                    ->label('Stundas laiks')
+                    ->required()
+                    ->searchable()
+                    ->options(function () use ($dayNumber) {
+                        return \App\Models\Laiks::where('DienasTips', $dayNumber == 5 ? 'short' : 'normal')
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];
+                            })
+                            ->toArray();
+                    }),
+
+                Select::make('stundaID')
+                    ->label('Stundas nosaukums')
+                    ->required()
+                    ->searchable()
+                    ->options(function (callable $get) {
+                        $kurssID = $get('../../kurssID');
+
+                        if ($kurssID) {
+                            $stundaIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
+                                ->where('daudzums', '>', 0)
+                                ->distinct('stundaID')
+                                ->pluck('stundaID')
+                                ->toArray();
+                                
+                            return \App\Models\Stunda::whereIn('id', $stundaIDs)
+                                ->pluck('Nosaukums', 'id')
+                                ->toArray();
+                        }
+
+                        return \App\Models\Stunda::pluck('Nosaukums', 'id')->toArray();
+                    })
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        $set('pasniedzejsID', null);
+                    }),
+
+                Select::make('pasniedzejsID')
+                    ->label('Stundas Pasniedzējs')
+                    ->required()
+                    ->searchable()
+                    ->options(function (callable $get) {
+                        $kurssID = $get('../../kurssID');
+                        $stundaID = $get('stundaID');
+
+                        if ($kurssID && $stundaID) {
+                            $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
+                                ->where('stundaID', $stundaID)
+                                ->where('daudzums', '>', 0)
+                                ->pluck('pasniedzejsID')
+                                ->toArray();
+                                
+                            return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
                                 ->get()
                                 ->mapWithKeys(function ($item) {
-                                    return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];
+                                    return [$item->id => $item->Vards . ' ' . $item->Uzvards];
                                 })
                                 ->toArray();
-                        }),
+                        } elseif ($kurssID) {
+                            $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
+                                ->where('daudzums', '>', 0)
+                                ->distinct('pasniedzejsID')
+                                ->pluck('pasniedzejsID')
+                                ->toArray();
+                                
+                            return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
+                                ->get()
+                                ->mapWithKeys(function ($item) {
+                                    return [$item->id => $item->Vards . ' ' . $item->Uzvards];
+                                })
+                                ->toArray();
+                        }
 
-                    Select::make('stundaID')
-                        ->label('Stundas nosaukums')
-                        ->required()
-                        ->searchable()
-                        ->options(function (callable $get) {
-                            $kurssID = $get('../../kurssID');
+                        return \App\Models\Pasniedzejs::all()->mapWithKeys(function ($item) {
+                            return [$item->id => $item->Vards . ' ' . $item->Uzvards];
+                        })->toArray();
+                    }),
 
-                            if ($kurssID) {
-                                $stundaIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
-                                    ->where('daudzums', '>', 0)
-                                    ->distinct('stundaID')
-                                    ->pluck('stundaID')
-                                    ->toArray();
-                                    
-                                return \App\Models\Stunda::whereIn('id', $stundaIDs)
-                                    ->pluck('Nosaukums', 'id')
-                                    ->toArray();
-                            }
-
-                            return \App\Models\Stunda::pluck('Nosaukums', 'id')->toArray();
-                        })
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, callable $set) {
-                            $set('pasniedzejsID', null);
-                        }),
-
-                    Select::make('pasniedzejsID')
-                        ->label('Stundas Pasniedzējs')
-                        ->required()
-                        ->searchable()
-                        ->options(function (callable $get) {
-                            $kurssID = $get('../../kurssID');
-                            $stundaID = $get('stundaID');
-
-                            if ($kurssID && $stundaID) {
-                                $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
-                                    ->where('stundaID', $stundaID)
-                                    ->where('daudzums', '>', 0)
-                                    ->pluck('pasniedzejsID')
-                                    ->toArray();
-                                    
-                                return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
-                                    ->get()
-                                    ->mapWithKeys(function ($item) {
-                                        return [$item->id => $item->Vards . ' ' . $item->Uzvards];
-                                    })
-                                    ->toArray();
-                            } elseif ($kurssID) {
-                                $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
-                                    ->where('daudzums', '>', 0)
-                                    ->distinct('pasniedzejsID')
-                                    ->pluck('pasniedzejsID')
-                                    ->toArray();
-                                    
-                                return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
-                                    ->get()
-                                    ->mapWithKeys(function ($item) {
-                                        return [$item->id => $item->Vards . ' ' . $item->Uzvards];
-                                    })
-                                    ->toArray();
-                            }
-
-                            return \App\Models\Pasniedzejs::all()->mapWithKeys(function ($item) {
-                                return [$item->id => $item->Vards . ' ' . $item->Uzvards];
-                            })->toArray();
-                        }),
-
-                    Select::make('kabinetaID')
-                        ->label('Kabinets')
-                        ->required()
-                        ->searchable()
-                        ->options(function () {
-                            return \App\Models\Kabinets::all()->mapWithKeys(function ($item) {
-                                return [$item->id => $item->vieta . ' ' . $item->skaitlis];
-                            })->toArray();
-                        }),
-                ])
-                ->createItemButtonLabel('Pievienot jaunu pārstundu')
-                ->columns(4),
-        ];
-    }
+                Select::make('kabinetaID')
+                    ->label('Kabinets')
+                    ->required()
+                    ->searchable()
+                    ->options(function () {
+                        return \App\Models\Kabinets::all()->mapWithKeys(function ($item) {
+                            return [$item->id => $item->vieta . ' ' . $item->skaitlis];
+                        })->toArray();
+                    }),
+            ])
+            ->createItemButtonLabel('Pievienot jaunu pārstundu')
+            ->columns(4),
+    ];
+}
 
     public static function table(Table $table): Table
     {
