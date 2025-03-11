@@ -115,70 +115,27 @@ private static function getDayScheduleFields(int $dayNumber): array
                     ->required()
                     ->searchable()
                     ->options(function (callable $get) use ($dayNumber) {
-                        $availableTimes = \App\Models\Laiks::where('DienasTips', $dayNumber == 5 ? 'short' : 'normal')
+                        $kurssID = $get('kurssID'); // Get selected course
+                        $datumsID = $get('datumsID'); // Get selected week/date
+                        
+                        // Fetch already selected laiksID values for the given kurssID and datumsID
+                        $existingLessons = IeplanotStundu::where('kurssID', $kurssID)
+                            ->where('datumsID', $datumsID)
+                            ->where('skaitlis', $dayNumber)
+                            ->pluck('laiksID')
+                            ->toArray();
+                        
+                        // Fetch available laiks based on day type (normal or short) and exclude selected ones
+                        return \App\Models\Laiks::where('DienasTips', $dayNumber == 5 ? 'short' : 'normal')
+                            ->whereNotIn('id', $existingLessons) // Exclude already selected times
                             ->get()
                             ->mapWithKeys(function ($item) {
                                 return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];
                             })
                             ->toArray();
-
-                        $selectedTimes = collect($get('../../day_' . $dayNumber . '_lessons'))
-                            ->pluck('laiksID')
-                            ->filter()
-                            ->toArray();
-                        return array_diff_key($availableTimes, array_flip($selectedTimes));
-                    }),
-                
-                
-
-                Select::make('stundaID')
-                    ->label('Stundas nosaukums')
-                    ->required()
-                    ->searchable()
-                    ->options(function (callable $get) {
-                        $kurssID = $get('../../kurssID');
-
-                        if ($kurssID) {
-                            $stundaIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
-                                ->where('daudzums', '>', 0)
-                                ->distinct('stundaID')
-                                ->pluck('stundaID')
-                                ->toArray();
-                                
-                            return \App\Models\Stunda::whereIn('id', $stundaIDs)
-                                ->pluck('Nosaukums', 'id')
-                                ->toArray();
-                        }
-
-                        return \App\Models\Stunda::pluck('Nosaukums', 'id')->toArray();
                     })
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $set('pasniedzejsID', null);
-                    }),
-
-                Select::make('pasniedzejsID')
-                    ->label('Stundas Pasniedzējs')
-                    ->required()
-                    ->searchable()
-                    ->options(function (callable $get) {
-                        $kurssID = $get('../../kurssID');
-                        $stundaID = $get('stundaID');
-
-                        if ($kurssID && $stundaID) {
-                            $pasniedzejsIDs = \App\Models\StundaAmount::where('kurssID', $kurssID)
-                                ->where('stundaID', $stundaID)
-                                ->where('daudzums', '>', 0)
-                                ->pluck('pasniedzejsID')
-                                ->toArray();
-                                
-                            return \App\Models\Pasniedzejs::whereIn('id', $pasniedzejsIDs)
-                                ->get()
-                                ->mapWithKeys(function ($item) {
-                                    return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];
-                                })
-                                ->toArray();
-                        }),
+                    ->default(fn (callable $get) => $get('laiksLabel')),
+               
 
                 Select::make('stundaID')
                     ->label('Stundas nosaukums')

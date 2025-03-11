@@ -106,15 +106,13 @@ class ViewWeeklyTimetable extends Page implements HasForms
         $lesson = IeplanotStundu::find($lessonId);
         
         if ($lesson) {
-            $weekLessons = IeplanotStundu::where('kurssID', $lesson->kurssID)
-                ->where('datumsID', $lesson->datumsID)
-                ->get();
             session()->put('editing_timetable', [
                 'kurssID' => $lesson->kurssID,
                 'datumsID' => $lesson->datumsID,
                 'sourceId' => $lessonId
             ]);
-            return redirect()->route('filament.resources.ieplanot-stundu-resource.edit', ['record' => $lessonId]);
+
+            return redirect("/admin/ieplanot-stundus/{$lessonId}/edit");
         }
     }
 }

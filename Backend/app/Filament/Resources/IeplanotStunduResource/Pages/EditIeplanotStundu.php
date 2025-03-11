@@ -35,7 +35,7 @@ class EditIeplanotStundu extends EditRecord
     {
         $weekLessons = IeplanotStundu::where('kurssID', $kurssID)
             ->where('datumsID', $datumsID)
-            ->with(['stunda', 'pasniedzejs', 'laiks'])
+            ->with(['stunda', 'pasniedzejs'])
             ->get();
     
         $formData = [
@@ -47,7 +47,6 @@ class EditIeplanotStundu extends EditRecord
             'day_4_lessons' => [],
             'day_5_lessons' => [],
         ];
-
     
         foreach ($weekLessons as $lesson) {
             $day = $lesson->skaitlis;
@@ -61,14 +60,13 @@ class EditIeplanotStundu extends EditRecord
                     'pasniedzejsVards' => $lesson->pasniedzejs ? $lesson->pasniedzejs->vards : null,
                     'kabinetaID' => $lesson->kabinetaID,
                     'skaitlis' => $day,
-                    'laiksSakums' => $lesson->laiks ? $lesson->laiks->sakumalaiks : null,
-                    'laiksBeigas' => $lesson->laiks ? $lesson->laiks->beigulaiks : null,
                 ];
             }
         }
     
         return $formData;
     }
+    
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
@@ -78,7 +76,7 @@ class EditIeplanotStundu extends EditRecord
         IeplanotStundu::where('kurssID', $kurssID)
             ->where('datumsID', $datumsID)
             ->delete();
-
+    
         for ($day = 1; $day <= 5; $day++) {
             $dayKey = "day_{$day}_lessons";
             
@@ -100,6 +98,7 @@ class EditIeplanotStundu extends EditRecord
                 }
             }
         }
+
         return $record;
     }
     
@@ -110,7 +109,6 @@ class EditIeplanotStundu extends EditRecord
             session()->forget('editing_timetable');
 
             $this->redirect(static::getResource()::getUrl('view-timetable', [
-
                 'selectedKurssId' => $timetableData['kurssID'],
                 'selectedDatumsId' => $timetableData['datumsID'],
             ]));
