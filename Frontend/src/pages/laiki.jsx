@@ -24,6 +24,7 @@ function Laiki() {
 
             setLoading(true);
             try {
+
                 const laiksResponse = await axios.get('https://api.markussv.id.lv/api/laiks', config);
                 setLaiksData(laiksResponse.data || []);
                 setError(null);
