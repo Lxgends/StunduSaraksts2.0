@@ -33,6 +33,12 @@ export function Header() {
             try {
                 const [pasniedzejsResponse, kurssResponse, kabinetsResponse] = await Promise.all([
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                    // axios.get('https://api.markussv.id.lv/api/pasniedzejs', config),
+                    // axios.get('https://api.markussv.id.lv/api/kurss', config),
+                    // axios.get('https://api.markussv.id.lv/api/kabinets', config)
+>>>>>>> Stashed changes
 =======
                     // axios.get('https://api.markussv.id.lv/api/pasniedzejs', config),
                     // axios.get('https://api.markussv.id.lv/api/kurss', config),

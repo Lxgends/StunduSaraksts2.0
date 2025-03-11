@@ -67,7 +67,13 @@
         </div>
     @endif
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 </x-filament::page>
+=======
+    @livewireStyles
+    @livewireScripts
+</x-filament::page>
+>>>>>>> Stashed changes
 =======
     @livewireStyles
     @livewireScripts

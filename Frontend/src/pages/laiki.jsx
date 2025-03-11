@@ -25,6 +25,10 @@ function Laiki() {
             setLoading(true);
             try {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                // const laiksResponse = await axios.get('https://api.markussv.id.lv/api/laiks', config);
+>>>>>>> Stashed changes
 =======
                 // const laiksResponse = await axios.get('https://api.markussv.id.lv/api/laiks', config);
 >>>>>>> Stashed changes
