@@ -32,23 +32,11 @@ function Pasniedzejs() {
             setLoading(true);
             try {
                 const [stundasResponse, laiksResponse, kabinetsResponse, datumsResponse] = await Promise.all([
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-                    // axios.get(`https://api.markussv.id.lv/api/ieplanotas-stundas?pasniedzejs=${encodeURIComponent(teacherName)}&datumsID=${datumaID}`, config),
-                    // axios.get(`https://api.markussv.id.lv/api/laiks`, config),
-                    // axios.get(`https://api.markussv.id.lv/api/kabinets`, config),
-                    // axios.get(`https://api.markussv.id.lv/api/datums`, config)
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?pasniedzejs=${encodeURIComponent(teacherName)}&datumsID=${datumaID}`, config),
-                    axios.get(`http://localhost:8000/api/laiks`, config),
-                    axios.get(`http://localhost:8000/api/kabinets`, config),
-                    axios.get(`http://localhost:8000/api/datums`, config)
+                    axios.get(`https://api.markussv.id.lv/api/ieplanotas-stundas?pasniedzejs=${encodeURIComponent(teacherName)}&datumsID=${datumaID}`, config),
+                    axios.get(`https://api.markussv.id.lv/api/laiks`, config),
+                    axios.get(`https://api.markussv.id.lv/api/kabinets`, config),
+                    axios.get(`https://api.markussv.id.lv/api/datums`, config)
+
                 ]);
 
                 const data = stundasResponse.data || [];

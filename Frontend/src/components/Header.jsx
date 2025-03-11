@@ -32,21 +32,9 @@ export function Header() {
             setLoading(true);
             try {
                 const [pasniedzejsResponse, kurssResponse, kabinetsResponse] = await Promise.all([
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-                    // axios.get('https://api.markussv.id.lv/api/pasniedzejs', config),
-                    // axios.get('https://api.markussv.id.lv/api/kurss', config),
-                    // axios.get('https://api.markussv.id.lv/api/kabinets', config)
->>>>>>> Stashed changes
-=======
-                    // axios.get('https://api.markussv.id.lv/api/pasniedzejs', config),
-                    // axios.get('https://api.markussv.id.lv/api/kurss', config),
-                    // axios.get('https://api.markussv.id.lv/api/kabinets', config)
->>>>>>> Stashed changes
-                    axios.get('http://localhost:8000/api/pasniedzejs', config),
-                    axios.get('http://localhost:8000/api/kurss', config),
-                    axios.get('http://localhost:8000/api/kabinets', config)
+                    axios.get('https://api.markussv.id.lv/api/pasniedzejs', config),
+                    axios.get('https://api.markussv.id.lv/api/kurss', config),
+                    axios.get('https://api.markussv.id.lv/api/kabinets', config)
                 ]);
 
                 setPasniedzejsData(pasniedzejsResponse.data || []);
@@ -64,7 +52,6 @@ export function Header() {
         fetchData();
         setupDropdownCloseListener();
 
-        // Add click outside listener
         const handleClickOutside = (event) => {
             if (headerRef.current && !headerRef.current.contains(event.target)) {
                 setMenuOpen(false);
@@ -73,8 +60,6 @@ export function Header() {
         };
 
         document.addEventListener('mousedown', handleClickOutside);
-
-        // Cleanup event listener
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };

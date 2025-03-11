@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\IeplanotStunduResource\Pages;
 
 use App\Filament\Resources\IeplanotStunduResource;
-use Filament\Actions;
+use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
+use App\Models\IeplanotStundu;
+use Illuminate\Database\Eloquent\Model;
 
 class EditIeplanotStundu extends EditRecord
 {
@@ -16,9 +18,8 @@ class EditIeplanotStundu extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-<<<<<<< Updated upstream
 }
-=======
+
     
     protected function mutateFormDataBeforeFill(array $data): array
     {
@@ -46,6 +47,7 @@ class EditIeplanotStundu extends EditRecord
             'day_4_lessons' => [],
             'day_5_lessons' => [],
         ];
+
     
         foreach ($weekLessons as $lesson) {
             $day = $lesson->skaitlis;
@@ -67,9 +69,7 @@ class EditIeplanotStundu extends EditRecord
     
         return $formData;
     }
-    
-    
-    
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         $kurssID = $data['kurssID'];
@@ -78,7 +78,7 @@ class EditIeplanotStundu extends EditRecord
         IeplanotStundu::where('kurssID', $kurssID)
             ->where('datumsID', $datumsID)
             ->delete();
-    
+
         for ($day = 1; $day <= 5; $day++) {
             $dayKey = "day_{$day}_lessons";
             
@@ -100,7 +100,6 @@ class EditIeplanotStundu extends EditRecord
                 }
             }
         }
-    
         return $record;
     }
     
@@ -111,6 +110,7 @@ class EditIeplanotStundu extends EditRecord
             session()->forget('editing_timetable');
 
             $this->redirect(static::getResource()::getUrl('view-timetable', [
+
                 'selectedKurssId' => $timetableData['kurssID'],
                 'selectedDatumsId' => $timetableData['datumsID'],
             ]));
@@ -119,4 +119,3 @@ class EditIeplanotStundu extends EditRecord
         }
     }
 }
->>>>>>> Stashed changes
