@@ -36,6 +36,7 @@ function Pasniedzejs() {
                     axios.get(`https://api.markussv.id.lv/api/laiks`, config),
                     axios.get(`https://api.markussv.id.lv/api/kabinets`, config),
                     axios.get(`https://api.markussv.id.lv/api/datums`, config)
+
                 ]);
 
                 const data = stundasResponse.data || [];

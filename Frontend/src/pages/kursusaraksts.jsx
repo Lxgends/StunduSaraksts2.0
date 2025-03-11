@@ -102,6 +102,9 @@ export function Kursusaraksts() {
         if (kabinetInfo.vieta === "Cēsis") {
             return `C. ${kabinetInfo.skaitlis}`;
         }
+        if (kabinetInfo.vieta === "Priekuļi") {
+            return `P. ${kabinetInfo.skaitlis}`;
+        }
         return kabinetInfo.vieta ? 
             `${kabinetInfo.skaitlis} (${kabinetInfo.vieta})` : 
             kabinetInfo.skaitlis;

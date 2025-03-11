@@ -135,7 +135,7 @@ private static function getDayScheduleFields(int $dayNumber): array
                             ->toArray();
                     })
                     ->default(fn (callable $get) => $get('laiksLabel')),
-                
+               
 
                 Select::make('stundaID')
                     ->label('Stundas nosaukums')

@@ -18,6 +18,8 @@ class EditIeplanotStundu extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+}
+
     
     protected function mutateFormDataBeforeFill(array $data): array
     {
@@ -65,7 +67,7 @@ class EditIeplanotStundu extends EditRecord
         return $formData;
     }
     
-    
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         $kurssID = $data['kurssID'];
@@ -96,7 +98,7 @@ class EditIeplanotStundu extends EditRecord
                 }
             }
         }
-    
+
         return $record;
     }
     
