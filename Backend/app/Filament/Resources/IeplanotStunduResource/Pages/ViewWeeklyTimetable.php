@@ -8,11 +8,12 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
+use App\Models\IeplanotStundu;
 
 class ViewWeeklyTimetable extends Page implements HasForms
 {
     use InteractsWithForms;
-    
+
     protected static string $resource = IeplanotStunduResource::class;
 
     protected static string $view = 'filament.resources.ieplanot-stundu-resource.pages.view-weekly-timetable';
@@ -91,9 +92,29 @@ class ViewWeeklyTimetable extends Page implements HasForms
                 'stunda' => $lesson->stunda->Nosaukums,
                 'pasniedzejs' => $lesson->pasniedzejs->Vards . ' ' . $lesson->pasniedzejs->Uzvards,
                 'kabinets' => $lesson->kabinets->vieta . ' ' . $lesson->kabinets->skaitlis,
+                'id' => $lesson->id,
             ];
         }
         
         $this->timetableData = $timetableData;
+    }
+    
+    public function redirectToEdit(int $lessonId)
+    {
+        $lesson = IeplanotStundu::find($lessonId);
+        
+        if ($lesson) {
+            $weekLessons = IeplanotStundu::where('kurssID', $lesson->kurssID)
+                ->where('datumsID', $lesson->datumsID)
+                ->get();
+
+            session()->put('editing_timetable', [
+                'kurssID' => $lesson->kurssID,
+                'datumsID' => $lesson->datumsID,
+                'sourceId' => $lessonId
+            ]);
+
+            return redirect()->route('filament.resources.ieplanot-stundu-resource.edit', ['record' => $lessonId]);
+        }
     }
 }
