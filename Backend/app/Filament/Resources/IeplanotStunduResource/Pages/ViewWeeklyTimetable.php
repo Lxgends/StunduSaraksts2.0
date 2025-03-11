@@ -34,6 +34,7 @@ class ViewWeeklyTimetable extends Page implements HasForms
                 ->schema([
                     Select::make('selectedKurssId')
                         ->label('Kurss')
+                        ->searchable()
                         ->options(function () {
                             return \App\Models\Kurss::pluck('Nosaukums', 'id')->toArray();
                         })
@@ -45,6 +46,7 @@ class ViewWeeklyTimetable extends Page implements HasForms
 
                     Select::make('selectedDatumsId')
                         ->label('Nedēļa')
+                        ->searchable()
                         ->options(function () {
                             return \App\Models\Datums::all()->mapWithKeys(function ($item) {
                                 return [$item->id => $item->PirmaisDatums . ' - ' . $item->PedejaisDatums];
@@ -104,17 +106,13 @@ class ViewWeeklyTimetable extends Page implements HasForms
         $lesson = IeplanotStundu::find($lessonId);
         
         if ($lesson) {
-            $weekLessons = IeplanotStundu::where('kurssID', $lesson->kurssID)
-                ->where('datumsID', $lesson->datumsID)
-                ->get();
-
             session()->put('editing_timetable', [
                 'kurssID' => $lesson->kurssID,
                 'datumsID' => $lesson->datumsID,
                 'sourceId' => $lessonId
             ]);
 
-            return redirect()->route('filament.resources.ieplanot-stundu-resource.edit', ['record' => $lessonId]);
+            return redirect("/admin/ieplanot-stundus/{$lessonId}/edit");
         }
     }
 }
