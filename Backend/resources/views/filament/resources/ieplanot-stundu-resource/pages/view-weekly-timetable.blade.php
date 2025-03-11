@@ -66,4 +66,10 @@
             </x-filament::card>
         </div>
     @endif
+<<<<<<< Updated upstream
 </x-filament::page>
+=======
+    @livewireStyles
+    @livewireScripts
+</x-filament::page>
+>>>>>>> Stashed changes

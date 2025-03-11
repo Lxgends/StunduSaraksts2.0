@@ -13,6 +13,8 @@
 		"preact-iso": "^2.6.3",
 		"preact-render-to-string": "^6.5.11",
 		"preact-router": "^4.1.2",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
 		"react-router-dom": "^6.27.0"
 	},
 	"proxy": "http://localhost:8000",
@@ -42,5 +44,8 @@
 	"main": "server.js",
 	"keywords": [],
 	"author": "",
-	"license": "ISC"
+	"license": "ISC",
+	"directories": {
+		"test": "test"
+	}
 }
