@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
+use Carbon\Carbon;
+use Filament\Forms\Get;
 use App\Filament\Resources\DatumsResource\Pages;
 use App\Filament\Resources\DatumsResource\RelationManagers;
 use App\Models\Datums;
@@ -12,16 +15,17 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Forms\Components\DatePicker;
 
 class DatumsResource extends Resource
 {
-
-    public static function getModelLabel(): string{
+    public static function getModelLabel(): string
+    {
         return 'Ieplānot nedēļas datumu';
     }
     
-    public static function getPluralModelLabel(): string{
+    public static function getPluralModelLabel(): string
+    {
         return 'Ieplānot nedēļas datumus';
     }
 
@@ -38,13 +42,25 @@ class DatumsResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('PirmaisDatums')
-                    ->label('Nedēļas sākuma datums')
-                    ->required(),
-
+                    ->label('Nedēļas sākuma datums (pirmdiena)')
+                    ->required()
+                    ->native(false)
+                    ->live()
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        if ($state) {
+                            $monday = Carbon::parse($state);
+                            if ($monday->isMonday()) {
+                                $friday = $monday->copy()->next(Carbon::FRIDAY);
+                                $set('PedejaisDatums', $friday->format('Y-m-d'));
+                            }
+                        }
+                    }),
+    
                 Forms\Components\DatePicker::make('PedejaisDatums')
-                    ->label('Nedēļas beigu datums')
-                    ->required(),
-        ]);
+                    ->label('Nedēļas beigu datums (piektdiena)')
+                    ->required()
+                    ->native(false),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -53,16 +69,18 @@ class DatumsResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('PirmaisDatums')
                     ->label('Nedēļas sākuma datums')
+                    ->date('d.m.Y')
                     ->sortable()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('PedejaisDatums')
                     ->label('Nedēļas beigu datums')
+                    ->date('d.m.Y')
                     ->sortable()
                     ->searchable(),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

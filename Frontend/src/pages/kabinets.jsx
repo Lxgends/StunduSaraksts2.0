@@ -32,10 +32,10 @@ function Kabinets() {
             setLoading(true);
             try {
                 const [stundasResponse, laiksResponse, kabinetsResponse, datumsResponse] = await Promise.all([
-                    axios.get(`https://api.markussv.id.lv/api/ieplanotas-stundas?kabinets=${encodeURIComponent(kabinetsNumber)}&datumsID=${datumaID}`, config),
-                    axios.get(`https://api.markussv.id.lv/api/laiks`, config),
-                    axios.get(`https://api.markussv.id.lv/api/kabinets`, config),
-                    axios.get(`https://api.markussv.id.lv/api/datums`, config)
+                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?kabinets=${encodeURIComponent(kabinetsNumber)}&datumsID=${datumaID}`, config),
+                    axios.get(`http://localhost:8000/api/laiks`, config),
+                    axios.get(`http://localhost:8000/api/kabinets`, config),
+                    axios.get(`http://localhost:8000/api/datums`, config)
                 ]);
 
                 const data = stundasResponse.data || [];

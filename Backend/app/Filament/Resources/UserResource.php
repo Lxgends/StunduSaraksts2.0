@@ -39,24 +39,32 @@ public static function getPluralModelLabel(): string{
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            TextInput::make('name')
-                ->label('Vārds')
-                ->required()
-                ->maxLength(255),
+            ->schema([
+                TextInput::make('name')
+                    ->label('Vārds')
+                    ->required()
+                    ->maxLength(255),
 
-            TextInput::make('email')
-                ->label('Ēpasts')
-                ->required()
-                ->maxLength(255),
+                TextInput::make('email')
+                    ->label('Ēpasts')
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(User::class, 'email', fn ($record) => $record)
+                    ->rules([
+                        'unique:users,email,' . ($record->id ?? 'NULL'),
+                    ])
+                    ->afterStateUpdated(fn ($state, $set) => $set('email', $state))
+                    ->validationMessages([
+                        'unique' => 'Šis ēpasts jau tiek izmantots. Lūdzu izvēlieties citu.',
+                    ]),
 
                 TextInput::make('password')
-                ->password()
-                ->label('Parole')
-                ->required()
-                ->minLength(8)
-                ->maxLength(64),
-        ]);
+                    ->password()
+                    ->label('Parole')
+                    ->required()
+                    ->minLength(8)
+                    ->maxLength(64),
+            ]);
     }
 
     public static function table(Table $table): Table
