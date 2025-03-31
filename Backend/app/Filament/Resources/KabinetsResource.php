@@ -67,7 +67,12 @@ public static function getPluralModelLabel(): string{
                     ->searchable(),
             ])
             ->filters([
-
+                Tables\Filters\SelectFilter::make('vieta')
+                    ->label('Skolas atrašanās vieta')
+                    ->options([
+                        'Cēsis' => 'Cēsis',
+                        'Priekuļi' => 'Priekuļi',
+                    ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

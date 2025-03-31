@@ -32,9 +32,9 @@ export function Header() {
             setLoading(true);
             try {
                 const [pasniedzejsResponse, kurssResponse, kabinetsResponse] = await Promise.all([
-                    axios.get('https://api.markussv.id.lv/api/pasniedzejs', config),
-                    axios.get('https://api.markussv.id.lv/api/kurss', config),
-                    axios.get('https://api.markussv.id.lv/api/kabinets', config)
+                    axios.get('http://localhost:8000/api/pasniedzejs', config),
+                    axios.get('http://localhost:8000/api/kurss', config),
+                    axios.get('http://localhost:8000/api/kabinets', config)
                 ]);
 
                 setPasniedzejsData(pasniedzejsResponse.data || []);

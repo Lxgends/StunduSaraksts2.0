@@ -50,7 +50,7 @@ class KurssResource extends Resource
                     ->searchable()
             ])
             ->filters([
-                // Any filters can go here
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -65,7 +65,7 @@ class KurssResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // Any relationships go here
+
         ];
     }
 

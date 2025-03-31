@@ -3,25 +3,23 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StundaResource\Pages;
-use App\Filament\Resources\StundaResource\RelationManagers;
 use App\Models\Stunda;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 
 class StundaResource extends Resource
 {
-
-    public static function getModelLabel(): string{
-        return 'Pievienot mācību priekšmetu';	
+    public static function getModelLabel(): string
+    {
+        return 'Pievienot mācību priekšmetu';    
     }
-    
-    public static function getPluralModelLabel(): string{
+
+    public static function getPluralModelLabel(): string
+    {
         return 'Pievienot mācību priekšmetus';
     }
 
@@ -41,6 +39,13 @@ class StundaResource extends Resource
                     ->label('Stundas nosaukums')
                     ->required()
                     ->maxLength(255)
+                    ->unique(Stunda::class, 'Nosaukums', fn ($record) => $record)
+                    ->rules([
+                        'unique:stunda,nosaukums,' . ($record->id ?? 'NULL'),
+                    ])
+                    ->validationMessages([
+                        'unique' => 'Šis stundas nosaukums jau tiek izmantots. Lūdzu izvēlieties citu.',
+                    ])
             ]);
     }
 

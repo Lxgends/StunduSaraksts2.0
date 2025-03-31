@@ -3,25 +3,24 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PasniedzejsResource\Pages;
-use App\Filament\Resources\PasniedzejsResource\RelationManagers;
 use App\Models\Pasniedzejs;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 
 class PasniedzejsResource extends Resource
 {
-public static function getModelLabel(): string{
+    public static function getModelLabel(): string
+    {
         return 'Pievienot Pasniedzēju';
     }
-    
-public static function getPluralModelLabel(): string{
+
+    public static function getPluralModelLabel(): string
+    {
         return 'Pievienot Pasniedzējus';
     }
 
@@ -47,12 +46,12 @@ public static function getPluralModelLabel(): string{
                     ->required()
                     ->maxLength(255),
 
-                    Select::make('KabinetsID')
-                        ->label('Kabinets')
-                        ->options(function () {
-                            return \App\Models\Kabinets::pluck('Skaitlis', 'id')->toArray();
-                        })
-                        ->placeholder('Nav Speciāls kabinets'),
+                Select::make('KabinetsID')
+                    ->label('Kabinets')
+                    ->options(function () {
+                        return \App\Models\Kabinets::pluck('Skaitlis', 'id')->toArray();
+                    })
+                    ->placeholder('Nav Speciāls kabinets'),
             ]);
     }
 

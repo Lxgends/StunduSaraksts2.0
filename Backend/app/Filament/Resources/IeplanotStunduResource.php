@@ -115,19 +115,17 @@ private static function getDayScheduleFields(int $dayNumber): array
                     ->required()
                     ->searchable()
                     ->options(function (callable $get) use ($dayNumber) {
-                        $kurssID = $get('kurssID'); // Get selected course
-                        $datumsID = $get('datumsID'); // Get selected week/date
-                        
-                        // Fetch already selected laiksID values for the given kurssID and datumsID
+                        $kurssID = $get('kurssID');
+                        $datumsID = $get('datumsID');
+
                         $existingLessons = IeplanotStundu::where('kurssID', $kurssID)
                             ->where('datumsID', $datumsID)
                             ->where('skaitlis', $dayNumber)
                             ->pluck('laiksID')
                             ->toArray();
-                        
-                        // Fetch available laiks based on day type (normal or short) and exclude selected ones
+
                         return \App\Models\Laiks::where('DienasTips', $dayNumber == 5 ? 'short' : 'normal')
-                            ->whereNotIn('id', $existingLessons) // Exclude already selected times
+                            ->whereNotIn('id', $existingLessons)
                             ->get()
                             ->mapWithKeys(function ($item) {
                                 return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];
