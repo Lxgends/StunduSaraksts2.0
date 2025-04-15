@@ -128,11 +128,14 @@ function Kabinets() {
 
     const groupedStundasData = groupByDayNumber(stundasData);
 
-    const renderClasses = (classes) => {
-        const maxClasses = 5;
+    const renderClasses = (classes, dayIndex) => {
+        // For Monday to Thursday (indices 0-3), use periods 1-5
+        // For Friday (index 4), use periods 6-10
+        const startPeriod = dayIndex === 4 ? 6 : 1;
+        const endPeriod = dayIndex === 4 ? 10 : 5;
         const renderedClasses = [];
 
-        for (let i = 1; i <= maxClasses; i++) {
+        for (let i = startPeriod; i <= endPeriod; i++) {
             const classItem = classes.find(item => item.laiksID === i);
             if (classItem) {
                 const laiksInfo = getLaiksInfo(classItem.laiksID);
@@ -140,7 +143,7 @@ function Kabinets() {
                 renderedClasses.push(
                     <div className="stundas" key={classItem.id}>
                         <div className="skaitlis">
-                            {i}.
+                            {dayIndex === 4 ? i - 5 : i}.
                         </div>
                         <div className="laiks">
                             {laiksInfo && laiksInfo.sakumalaiks ? 
@@ -156,8 +159,8 @@ function Kabinets() {
                         <div className="pasniedzejs">
                             {classItem.pasniedzejs ? `${classItem.pasniedzejs.Vards} ${classItem.pasniedzejs.Uzvards}` : "Unknown Teacher"}
                         </div>
-                        <div className="kabinets">
-                            {formatKabinetDisplay(kabinetInfo)}
+                        <div className="kurss">
+                            {classItem.kurss ? classItem.kurss.Nosaukums : "Unknown Course"}
                         </div>
                     </div>
                 );
@@ -165,7 +168,7 @@ function Kabinets() {
                 renderedClasses.push(
                     <div className="stundas" key={`empty-${i}`}>
                         <div className="skaitlis">
-                            {i}.
+                            {dayIndex === 4 ? i - 5 : i}.
                         </div>
                         <div className="laiks">
                             Nenotiek stunda
@@ -223,7 +226,7 @@ function Kabinets() {
                             groupedStundasData.map((group, groupIndex) => (
                                 <div key={groupIndex}>
                                     <h3>{group.day}</h3>
-                                    {renderClasses(group.classes)}
+                                    {renderClasses(group.classes, groupIndex)}
                                 </div>
                             ))
                         )}

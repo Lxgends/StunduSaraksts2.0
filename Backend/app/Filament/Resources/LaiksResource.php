@@ -63,13 +63,18 @@ class LaiksResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('DienasTips')
-                    ->label('Dienas garuma tips')
-                    ->sortable()
-                    ->searchable()
-                    ->formatStateUsing(fn ($state) => [
-                        'normal' => 'Ikdienas stundas',
-                        'short' => 'Īsās stundas',
-                    ][$state] ?? 'Unknown'),
+                ->label('Dienas garuma tips')
+                ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'normal' => 'danger',
+                    'short' => 'success',
+                    default => 'gray',
+                })
+                ->formatStateUsing(fn ($state) => match ($state) {
+                    'normal' => 'Ikdienas stundas',
+                    'short' => 'Īsās stundas',
+                    default => $state,
+                }),
 
                 TextColumn::make('sakumalaiks')
                     ->label('Stundu sākuma laiks')

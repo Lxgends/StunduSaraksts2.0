@@ -57,9 +57,18 @@ public static function getPluralModelLabel(): string{
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('vieta')
-                    ->label('Skolas atrašanās vieta')
-                    ->sortable()
-                    ->searchable(),
+                    ->label('Vieta')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Cēsis' => 'info',
+                        'Priekuļi' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'Cēsis' => 'Cēsis',
+                        'Priekuļi' => 'Priekuļi',
+                        default => $state,
+                    }),
 
                 Tables\Columns\TextColumn::make('skaitlis')
                     ->label('Kabineta numurs vai nosaukums')
