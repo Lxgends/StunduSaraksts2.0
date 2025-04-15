@@ -39,6 +39,16 @@
     color: #282560;
 }
 
+body.dark-mode .classTitle,
+body.dark-mode .breakTitle {
+    color: white; 
+}
+
+body.dark-mode .titleb {
+    color: white;
+    text-decoration: white underline;
+}
+
 @media (max-width: 1500px) {
 
     main {

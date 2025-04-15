@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\SelectFilter;
 
 class StundaAmountResource extends Resource
 {
@@ -85,8 +86,12 @@ class StundaAmountResource extends Resource
                     ->searchable()
                     ->getStateUsing(function ($record) {
                         if ($record->pasniedzejsID) {
-                            return $record->pasniedzejs()->pluck('Vards', 'Uzvards')->first();
+                            $pasniedzejs = $record->pasniedzejs;
+                            if ($pasniedzejs) {
+                                return $pasniedzejs->Vards . ' ' . $pasniedzejs->Uzvards;
+                            }
                         }
+                        return null;
                     }),
 
                 TextColumn::make('kurssID')
@@ -98,6 +103,20 @@ class StundaAmountResource extends Resource
                             return $record->kurss()->pluck('Nosaukums')->first();
                         }
                     }),
+            ])
+            ->filters([
+                SelectFilter::make('stundaID')
+                    ->label('Stunda')
+                    ->relationship('stunda', 'Nosaukums'),
+                
+                SelectFilter::make('pasniedzejsID')
+                    ->label('Pasniedzējs')
+                    ->relationship('pasniedzejs', 'Vards')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->Vards . ' ' . $record->Uzvards),
+                
+                SelectFilter::make('kurssID')
+                    ->label('Kurss')
+                    ->relationship('kurss', 'Nosaukums'),
             ]);
     }
 

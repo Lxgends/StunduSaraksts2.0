@@ -19,7 +19,6 @@ Route::get('/ieplanotas-stundas', [IeplanotStunduController::class, 'index']);
 Route::get('/laiks', [LaiksController::class, 'index']);
 
 
-// Header routes
 Route::get('/kurss', [KurssController::class, 'index']);
 Route::get('/pasniedzejs', [PasniedzejsController::class, 'index']);
 Route::get('/kabinets', [KabinetsController::class, 'index']);

@@ -121,11 +121,12 @@ export function Kursusaraksts() {
 
     const groupedStundasData = groupByDayNumber(stundasData);
 
-    const renderClasses = (classes) => {
-        const maxClasses = 5;
+    const renderClasses = (classes, dayIndex) => {
+        const startPeriod = dayIndex === 4 ? 6 : 1;
+        const endPeriod = dayIndex === 4 ? 10 : 5;
         const renderedClasses = [];
-
-        for (let i = 1; i <= maxClasses; i++) {
+    
+        for (let i = startPeriod; i <= endPeriod; i++) {
             const classItem = classes.find(item => item.laiksID === i);
             if (classItem) {
                 const laiksInfo = getLaiksInfo(classItem.laiksID);
@@ -133,7 +134,7 @@ export function Kursusaraksts() {
                 renderedClasses.push(
                     <div className="stundas" key={classItem.id}>
                         <div className="skaitlis">
-                            {i}.
+                            {dayIndex === 4 ? i - 5 : i}.
                         </div>
                         <div className="laiks">
                             {laiksInfo && laiksInfo.sakumalaiks ? 
@@ -158,7 +159,7 @@ export function Kursusaraksts() {
                 renderedClasses.push(
                     <div className="stundas" key={`empty-${i}`}>
                         <div className="skaitlis">
-                            {i}.
+                            {dayIndex === 4 ? i - 5 : i}.
                         </div>
                         <div className="laiks">
                             Nenotiek stunda
@@ -167,7 +168,7 @@ export function Kursusaraksts() {
                 );
             }
         }
-
+    
         return renderedClasses;
     };
 
@@ -213,7 +214,7 @@ export function Kursusaraksts() {
                             groupedStundasData.map((group, groupIndex) => (
                                 <div key={groupIndex}>
                                     <h3>{group.day}</h3>
-                                    {renderClasses(group.classes)}
+                                    {renderClasses(group.classes, groupIndex)}
                                 </div>
                             ))
                         )}
