@@ -13,8 +13,9 @@ class IeplanotStunduController extends Controller
         $kurssName = $request->query('kurss');
         $teacherName = $request->query('pasniedzejs');
         $kabinetsNumber = $request->query('kabinets');
+        $vieta = $request->query('vieta');
         $datumsID = $request->query('datumsID');
-
+    
         $stundas = IeplanotStundu::with(['kurss', 'pasniedzejs', 'kabinets', 'stunda', 'datums'])
             ->when($kurssName, function ($query) use ($kurssName) {
                 $query->whereHas('kurss', function ($query) use ($kurssName) {
@@ -34,13 +35,19 @@ class IeplanotStunduController extends Controller
                     $query->where('Skaitlis', $kabinetsNumber);
                 });
             })
+            ->when($vieta, function ($query) use ($vieta) {
+                $query->whereHas('kabinets', function ($query) use ($vieta) {
+                    $query->where('Vieta', $vieta);
+                });
+            })
             ->when($datumsID, function ($query) use ($datumsID) {
                 $query->where('datumsID', $datumsID);
             })
             ->get();
-
+    
         return response()->json($stundas);
     }
+    
 
     public function store(Request $request)
     {

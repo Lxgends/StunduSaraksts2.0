@@ -14,11 +14,11 @@ use Filament\Tables\Table;
 class KurssResource extends Resource
 {
     public static function getModelLabel(): string{
-        return 'Pievienot Kursu';
+        return 'skolēnu kursa ieraksts';
     }
     
     public static function getPluralModelLabel(): string{
-        return 'Pievienot Kursus';
+        return 'Skolēnu kursi';
     }
 
     protected static ?string $model = Kurss::class;
@@ -36,7 +36,7 @@ class KurssResource extends Resource
                 Forms\Components\TextInput::make('Nosaukums')
                     ->label('Kursa nosaukums')
                     ->required()
-                    ->maxLength(255)
+                    ->maxLength(50)
             ]);
     }
 

@@ -13,10 +13,12 @@ function Kabinets() {
     const [kabinetsList, setKabinetsList] = useState([]);
     const [datumaID, setDatumaID] = useState(null);
     const [allDatums, setAllDatums] = useState([]);
+    const [selectedKabinet, setSelectedKabinet] = useState(null);
 
     const queryString = window.location.search;
     const queryParams = new URLSearchParams(queryString);
     const kabinetsNumber = queryParams.get('number');
+    const vieta = queryParams.get('vieta');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,10 +33,23 @@ function Kabinets() {
 
             setLoading(true);
             try {
-                const [stundasResponse, laiksResponse, kabinetsResponse, datumsResponse] = await Promise.all([
-                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?kabinets=${encodeURIComponent(kabinetsNumber)}&datumsID=${datumaID}`, config),
+                // First fetch kabinetsList to get the correct kabinetaID
+                const kabinetsResponse = await axios.get(`http://localhost:8000/api/kabinets`, config);
+                const kabinetsData = kabinetsResponse.data || [];
+                setKabinetsList(kabinetsData);
+                
+                // Find the exact kabinet matching both number and location
+                const exactKabinet = kabinetsData.find(k => 
+                    // Use exact case-insensitive comparison for both fields
+                    k.skaitlis?.toString() === kabinetsNumber?.toString() && 
+                    k.vieta?.toLowerCase() === vieta?.toLowerCase()
+                );
+                
+                setSelectedKabinet(exactKabinet);
+                
+                const [stundasResponse, laiksResponse, datumsResponse] = await Promise.all([
+                    axios.get(`http://localhost:8000/api/ieplanotas-stundas?vieta=${encodeURIComponent(vieta || '')}&kabinets=${encodeURIComponent(kabinetsNumber || '')}&datumsID=${datumaID}`, config),
                     axios.get(`http://localhost:8000/api/laiks`, config),
-                    axios.get(`http://localhost:8000/api/kabinets`, config),
                     axios.get(`http://localhost:8000/api/datums`, config)
                 ]);
 
@@ -55,9 +70,6 @@ function Kabinets() {
                 const laiksData = laiksResponse.data || [];
                 setLaiksList(laiksData);
 
-                const kabinetsData = kabinetsResponse.data || [];
-                setKabinetsList(kabinetsData);
-
                 setError(null);
             } catch (err) {
                 console.error('API Error:', err.response?.data || err.message);
@@ -67,10 +79,12 @@ function Kabinets() {
             }
         };
 
-        if (kabinetsNumber) {
+        if (kabinetsNumber && vieta) {
             fetchData();
+        } else if (kabinetsNumber && !vieta) {
+            setError("Missing location parameter");
         }
-    }, [kabinetsNumber, datumaID]);
+    }, [kabinetsNumber, vieta, datumaID]);
 
     useEffect(() => {
         if (allDatums.length > 0 && !datumaID) {
@@ -113,7 +127,7 @@ function Kabinets() {
             return `P. ${kabinetInfo.skaitlis}`;
         }
         return kabinetInfo.vieta ? 
-            `${kabinetInfo.skaitlis} (${kabinetInfo.vieta})` : 
+            `${kabinetInfo.vieta} ${kabinetInfo.skaitlis}` : 
             kabinetInfo.skaitlis;
     };
 
@@ -129,8 +143,6 @@ function Kabinets() {
     const groupedStundasData = groupByDayNumber(stundasData);
 
     const renderClasses = (classes, dayIndex) => {
-        // For Monday to Thursday (indices 0-3), use periods 1-5
-        // For Friday (index 4), use periods 6-10
         const startPeriod = dayIndex === 4 ? 6 : 1;
         const endPeriod = dayIndex === 4 ? 10 : 5;
         const renderedClasses = [];
@@ -195,8 +207,6 @@ function Kabinets() {
         });
     };
 
-    const kabinet = kabinetsList.find(k => k.skaitlis === kabinetsNumber);
-
     return (
         <div className="kabinetsMain">
             {error && <div className="error-message">Error: {error}</div>}
@@ -205,8 +215,10 @@ function Kabinets() {
             ) : (
                 <>
                     <div className="header">
-                        {kabinet && (
-                            <h2>Nedēļas grafiks mācību stundām kas notiek: {kabinet.vieta} {kabinet.skaitlis} </h2>
+                        {selectedKabinet ? (
+                            <h2>Nedēļas grafiks mācību stundām kas notiek: {selectedKabinet.vieta} {selectedKabinet.skaitlis}</h2>
+                        ) : (
+                            <h2>Kabinets nav atrasts: {vieta} {kabinetsNumber}</h2>
                         )}
                     </div>
                     <div className="datuma-selector">

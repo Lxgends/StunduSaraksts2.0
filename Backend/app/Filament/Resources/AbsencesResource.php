@@ -27,7 +27,7 @@ class AbsencesResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Prombūtne';
+        return 'prombūtnes ieraksts';
     }
 
     public static function getPluralModelLabel(): string

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->text('DienasTips');
             $table->time('sakumalaiks');
             $table->time('beigulaiks');
-            $table->text('Diena');
             $table->timestamps();
         });
     }

@@ -21,12 +21,12 @@ class DatumsResource extends Resource
 {
     public static function getModelLabel(): string
     {
-        return 'Ieplānot nedēļas datumu';
+        return 'nedēļas datumu ieraksts';
     }
     
     public static function getPluralModelLabel(): string
     {
-        return 'Ieplānot nedēļas datumus';
+        return 'Nedēļas datumi';
     }
 
     protected static ?string $model = Datums::class;

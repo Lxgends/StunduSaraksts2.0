@@ -15,12 +15,12 @@ class StundaResource extends Resource
 {
     public static function getModelLabel(): string
     {
-        return 'Pievienot mācību priekšmetu';    
+        return 'mācību priekšmeta ieraksts';    
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Pievienot mācību priekšmetus';
+        return 'Mācību priekšmeti';
     }
 
     protected static ?string $model = Stunda::class;

@@ -18,11 +18,11 @@ use Filament\Tables\Columns\TextColumn;
 class LaiksResource extends Resource
 {
     public static function getModelLabel(): string{
-        return 'Pievienot pārstundas laiku';
+        return 'pārstundas laiku iearaksts';
     }
     
     public static function getPluralModelLabel(): string{
-        return 'Pievienot pārstundas laikus';
+        return 'Pārstundu laiki';
     }
     protected static ?string $model = Laiks::class;
 

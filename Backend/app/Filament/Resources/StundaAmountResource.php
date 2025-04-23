@@ -16,6 +16,15 @@ use Filament\Tables\Filters\SelectFilter;
 
 class StundaAmountResource extends Resource
 {
+    public static function getModelLabel(): string
+    {
+        return 'mācību priekšmetu daudzuma ieraksts';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Mācību priekšmetu daudzumi';
+    }
     protected static ?string $model = StundaAmount::class;
 
     protected static ?string $navigationGroup = 'Izglītības pārvaldība';
@@ -117,6 +126,9 @@ class StundaAmountResource extends Resource
                 SelectFilter::make('kurssID')
                     ->label('Kurss')
                     ->relationship('kurss', 'Nosaukums'),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
             ]);
     }
 
