@@ -12,9 +12,20 @@ class CreateLaiks extends CreateRecord
 
     protected function handleRecordCreation(array $data): \Illuminate\Database\Eloquent\Model
     {
+        if (Laiks::count() >= 12) {
+            Notification::make()
+                ->title('Sasniegts maksimālais ierakstu skaits')
+                ->body('Sistēmā var būt tikai 12 pārstundu laiki.')
+                ->danger()
+                ->send();
+    
+            $this->halt();
+            return new Laiks();
+        }
+    
         $start = date('H:i:s', strtotime($data['sakumalaiks']));
         $end = date('H:i:s', strtotime($data['beigulaiks']));
-
+    
         if (Laiks::where('DienasTips', $data['DienasTips'])
             ->where('sakumalaiks', $start)
             ->where('beigulaiks', $end)
@@ -29,13 +40,14 @@ class CreateLaiks extends CreateRecord
             $this->halt();
             return new Laiks();
         }
-
+    
         return Laiks::create([
             'DienasTips' => $data['DienasTips'],
             'sakumalaiks' => $start,
             'beigulaiks' => $end
         ]);
     }
+    
     
     protected function getRedirectUrl(): string
     {

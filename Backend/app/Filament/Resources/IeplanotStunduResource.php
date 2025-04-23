@@ -34,12 +34,12 @@ class IeplanotStunduResource extends Resource
 {
     public static function getModelLabel(): string
     {
-        return 'Ieplānot Pārstundu';
+        return 'nedēļas pārstundu ieraksts kursam';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Ieplānot Pārstundas';
+        return 'Nedēļas pārstundas';
     }
 
     protected static ?string $model = IeplanotStundu::class;
@@ -102,7 +102,7 @@ class IeplanotStunduResource extends Resource
     }
 
     private static function getDayScheduleFields(int $dayNumber): array 
-{
+    {
     return [
         Repeater::make("day_{$dayNumber}_lessons")
             ->label('Dienas Pārstundas')
@@ -117,17 +117,10 @@ class IeplanotStunduResource extends Resource
                     ->required()
                     ->searchable()
                     ->options(function (callable $get) use ($dayNumber) {
-                        $kurssID = $get('../../kurssID');
-                        $datumsID = $get('../../datumsID');
-
-                        $existingLessons = IeplanotStundu::where('kurssID', $kurssID)
-                            ->where('datumsID', $datumsID)
-                            ->where('skaitlis', $dayNumber)
-                            ->pluck('laiksID')
-                            ->toArray();
+                        $excludedIds = [11, 12];
 
                         return \App\Models\Laiks::where('DienasTips', $dayNumber == 5 ? 'short' : 'normal')
-                            ->whereNotIn('id', $existingLessons)
+                            ->whereNotIn('id', $excludedIds)
                             ->get()
                             ->mapWithKeys(function ($item) {
                                 return [$item->id => $item->sakumalaiks . ' - ' . $item->beigulaiks];

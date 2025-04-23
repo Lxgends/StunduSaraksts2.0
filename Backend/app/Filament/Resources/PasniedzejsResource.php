@@ -16,12 +16,12 @@ class PasniedzejsResource extends Resource
 {
     public static function getModelLabel(): string
     {
-        return 'Pievienot Pasniedzēju';
+        return 'pasniedzēja ieraksts';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Pievienot Pasniedzējus';
+        return 'Pasniedzēji';
     }
 
     protected static ?string $model = Pasniedzejs::class;
@@ -39,12 +39,12 @@ class PasniedzejsResource extends Resource
                 Forms\Components\TextInput::make('Vards')
                     ->label('Pasniedzēja vārds')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(50),
 
                 Forms\Components\TextInput::make('Uzvards')
                     ->label('Pasniedzēja uzvārds')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(50),
 
                 Select::make('KabinetsID')
                     ->label('Kabinets')

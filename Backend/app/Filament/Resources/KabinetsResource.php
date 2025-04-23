@@ -18,11 +18,11 @@ class KabinetsResource extends Resource
 {
 
 public static function getModelLabel(): string{
-        return 'Pievienot Kabinetu';
+        return 'skolas kabineta ieraksts';
     }
     
 public static function getPluralModelLabel(): string{
-        return 'Pievienot Kabinetus';
+        return 'Skolu kabineti';
     }
 
     protected static ?string $model = Kabinets::class;

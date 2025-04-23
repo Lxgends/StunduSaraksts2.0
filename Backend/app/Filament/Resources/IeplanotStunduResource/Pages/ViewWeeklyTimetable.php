@@ -12,6 +12,12 @@ use App\Models\IeplanotStundu;
 
 class ViewWeeklyTimetable extends Page implements HasForms
 {
+
+    public function getTitle(): string
+    {
+        return 'Mācību stundu laika tabula';
+    }   
+
     use InteractsWithForms;
 
     protected static string $resource = IeplanotStunduResource::class;

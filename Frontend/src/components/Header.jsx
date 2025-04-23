@@ -14,9 +14,9 @@ export function Header() {
     const [loading, setLoading] = useState(true);
     const [menuOpen, setMenuOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
-
     const headerRef = useRef(null);
-    const { url } = useLocation();
+    
+    const { url, search } = useLocation(); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,7 +63,7 @@ export function Header() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [search]);
 
     useEffect(() => {
         if (darkMode) {
@@ -115,7 +115,7 @@ export function Header() {
                         {loading ? (
                             <p>Ielādē...</p>
                         ) : kurssData.length === 0 ? (
-                            <p>No courses available.</p>
+                            <p>Netika atrasts nekāds kurss.</p>
                         ) : (
                             kurssData.map((item, index) => (
                                 <a key={item.Nosaukums || item.id || index} href={`/kurss?kurss=${encodeURIComponent(item.Nosaukums)}`} onClick={handleDropdownItemClick}>
@@ -139,7 +139,7 @@ export function Header() {
                         {loading ? (
                             <p>Ielādē...</p>
                         ) : pasniedzejsData.length === 0 ? (
-                            <p>No teachers available.</p>
+                            <p>Netika atrasts neviens pasniedzējs.</p>
                         ) : (
                             pasniedzejsData.map((item, index) => (
                                 <a key={`${item.Vards}-${item.Uzvards || index}`} href={`/pasniedzejs?name=${encodeURIComponent(item.Vards + ' ' + item.Uzvards)}`} onClick={handleDropdownItemClick}>
@@ -163,11 +163,15 @@ export function Header() {
                         {loading ? (
                             <p>Ielādē...</p>
                         ) : kabinetsData.length === 0 ? (
-                            <p>No rooms available.</p>
+                            <p>Netika atrasts neviens kabinets.</p>
                         ) : (
                             kabinetsData.map((item, index) => (
-                                <a key={item.skaitlis || index} href={`/kabinets?number=${encodeURIComponent(item.skaitlis)}`} onClick={handleDropdownItemClick}>
-                                    {item.vieta && item.skaitlis ? `${item.vieta.charAt(0)}. ${item.skaitlis}` : "Unknown Room"}
+                                <a
+                                    key={`${item.vieta}-${item.skaitlis}` || index}
+                                    href={`/kabinets?vieta=${encodeURIComponent(item.vieta || '')}&number=${encodeURIComponent(item.skaitlis || '')}`}
+                                    onClick={handleDropdownItemClick}
+                                >
+                                    {item.vieta && item.skaitlis ? `${item.vieta} ${item.skaitlis}` : "Unknown Room"}
                                 </a>
                             ))
                         )}

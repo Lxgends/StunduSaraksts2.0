@@ -91,76 +91,106 @@ class CreateIeplanotStundu extends CreateRecord
     }
 
     protected function checkForConflicts(array $lessons): array
-    {
-        $conflicts = [];
-        $timeSlots = [];
-        $teacherSlots = [];
-        $roomSlots = [];
-    
-        foreach ($lessons as $lesson) {
-            $datums = Datums::find($lesson['datumsID']);
-            if (!$datums) {
-                $conflicts[] = "Nederīgs datuma ieraksts.";
-                continue;
-            }
-    
-            $start = $datums->PirmaisDatums;
-            $end = $datums->PedejaisDatums;
-            $lessonDate = $this->getDateForDayOfWeek($lesson['skaitlis'], $start);
-    
-            $formattedDate = ucfirst($lessonDate->locale('lv')->isoFormat('dddd, D.MM.YYYY'));
+{
+    $conflicts = [];
+    $timeSlots = [];
+    $teacherSlots = [];
+    $roomSlots = [];
 
-    
-            $isPasniedzejsAbsent = Absences::where('absence_type', 'pasniedzejs')
-                ->where('pasniedzejsID', $lesson['pasniedzejsID'])
-                ->where(function ($q) use ($lessonDate) {
-                    $q->whereDate('sakuma_datums', '<=', $lessonDate)
-                      ->whereDate('beigu_datums', '>=', $lessonDate);
-                })
-                ->exists();
-    
-            if ($isPasniedzejsAbsent) {
-                $conflicts[] = "Pasniedzējs ir prombūtnē šajā dienā ({$formattedDate}).";
-            }
-    
-            $isKurssAbsent = Absences::where('absence_type', 'kurss')
-                ->where('kurssID', $lesson['kurssID'])
-                ->where(function ($q) use ($lessonDate) {
-                    $q->whereDate('sakuma_datums', '<=', $lessonDate)
-                      ->whereDate('beigu_datums', '>=', $lessonDate);
-                })
-                ->exists();
-    
-            if ($isKurssAbsent) {
-                $conflicts[] = "Kurss ir prombūtnē šajā dienā ({$formattedDate}).";
-            }
-    
-            $timeKey = "{$lesson['datumsID']}_{$lesson['skaitlis']}_{$lesson['laiksID']}";
-            if (isset($timeSlots[$timeKey])) {
-                $conflicts[] = "Šajā laikā jau eksistē stunda šim kursam un nedēļai (diena: {$formattedDate}).";
-            }
-    
-            $teacherKey = "{$timeKey}_{$lesson['pasniedzejsID']}";
-            if (isset($teacherSlots[$teacherKey])) {
-                $conflicts[] = "Izvēlētais pasniedzējs šajā laikā jau ir aizņemts (diena: {$formattedDate}).";
-            }
-    
-            $roomKey = "{$timeKey}_{$lesson['kabinetaID']}";
-            if (isset($roomSlots[$roomKey])) {
-                $conflicts[] = "Šajā laikā izvēlētais kabinets jau ir aizņemts (diena: {$formattedDate}).";
-            }
-    
-            $timeSlots[$timeKey] = true;
-            $teacherSlots[$teacherKey] = true;
-            $roomSlots[$roomKey] = true;
+    foreach ($lessons as $lesson) {
+        $datums = Datums::find($lesson['datumsID']);
+        if (!$datums) {
+            $conflicts[] = "Nederīgs datuma ieraksts.";
+            continue;
         }
-    
-        return $conflicts;
+
+        $start = $datums->PirmaisDatums;
+        $end = $datums->PedejaisDatums;
+        $lessonDate = $this->getDateForDayOfWeek($lesson['skaitlis'], $start);
+
+        $formattedDate = ucfirst($lessonDate->locale('lv')->isoFormat('dddd, D.MM.YYYY'));
+        
+        $laiks = \App\Models\Laiks::find($lesson['laiksID']);
+        $laiksInfo = $laiks ? "Laiks: {$laiks->sakumalaiks} - {$laiks->beigulaiks}" : "LaiksID: {$lesson['laiksID']}";
+
+        $isPasniedzejsAbsent = Absences::where('absence_type', 'pasniedzejs')
+            ->where('pasniedzejsID', $lesson['pasniedzejsID'])
+            ->where(function ($q) use ($lessonDate) {
+                $q->whereDate('sakuma_datums', '<=', $lessonDate)
+                ->whereDate('beigu_datums', '>=', $lessonDate);
+            })
+            ->exists();
+
+        if ($isPasniedzejsAbsent) {
+            $conflicts[] = "Pasniedzējs ir prombūtnē šajā dienā ({$formattedDate}). {$laiksInfo}";
+        }
+
+        $isKurssAbsent = Absences::where('absence_type', 'kurss')
+            ->where('kurssID', $lesson['kurssID'])
+            ->where(function ($q) use ($lessonDate) {
+                $q->whereDate('sakuma_datums', '<=', $lessonDate)
+                ->whereDate('beigu_datums', '>=', $lessonDate);
+            })
+            ->exists();
+
+        if ($isKurssAbsent) {
+            $conflicts[] = "Kurss ir prombūtnē šajā dienā ({$formattedDate}). {$laiksInfo}";
+        }
+
+        $timeKey = "{$lesson['datumsID']}_{$lesson['skaitlis']}_{$lesson['laiksID']}";
+        if (isset($timeSlots[$timeKey])) {
+            $conflicts[] = "Šajā laikā jau eksistē stunda šim kursam un nedēļai (diena: {$formattedDate}). {$laiksInfo}";
+        }
+
+        $teacherKey = "{$timeKey}_{$lesson['pasniedzejsID']}";
+        if (isset($teacherSlots[$teacherKey])) {
+            $conflicts[] = "Izvēlētais pasniedzējs šajā laikā jau ir aizņemts (diena: {$formattedDate}). {$laiksInfo}";
+        }
+
+        $roomKey = "{$timeKey}_{$lesson['kabinetaID']}";
+        if (isset($roomSlots[$roomKey])) {
+            $conflicts[] = "Šajā laikā izvēlētais kabinets jau ir aizņemts (diena: {$formattedDate}). {$laiksInfo}";
+        }
+
+        $existingCourseLesson = IeplanotStundu::where('kurssID', $lesson['kurssID'])
+            ->where('datumsID', $lesson['datumsID'])
+            ->where('skaitlis', $lesson['skaitlis'])
+            ->where('laiksID', $lesson['laiksID'])
+            ->exists();
+            
+        if ($existingCourseLesson) {
+            $conflicts[] = "Šim kursam jau eksistē stunda šajā laikā (diena: {$formattedDate}). {$laiksInfo}";
+        }
+        
+        $existingTeacherLesson = IeplanotStundu::where('datumsID', $lesson['datumsID'])
+            ->where('skaitlis', $lesson['skaitlis'])
+            ->where('laiksID', $lesson['laiksID'])
+            ->where('pasniedzejsID', $lesson['pasniedzejsID'])
+            ->exists();
+            
+        if ($existingTeacherLesson) {
+            $conflicts[] = "Izvēlētais pasniedzējs jau ir aizņemts ar citu kursu šajā laikā (diena: {$formattedDate}). {$laiksInfo}";
+        }
+        
+        $existingRoomLesson = IeplanotStundu::where('datumsID', $lesson['datumsID'])
+            ->where('skaitlis', $lesson['skaitlis'])
+            ->where('laiksID', $lesson['laiksID'])
+            ->where('kabinetaID', $lesson['kabinetaID'])
+            ->exists();
+            
+        if ($existingRoomLesson) {
+            $conflicts[] = "Izvēlētais kabinets jau ir aizņemts ar citu kursu šajā laikā (diena: {$formattedDate}). {$laiksInfo}";
+        }
+
+        $timeSlots[$timeKey] = true;
+        $teacherSlots[$teacherKey] = true;
+        $roomSlots[$roomKey] = true;
     }
+
+    return $conflicts;
+}
     
     
-
-
     protected function getDateForDayOfWeek(int $dayNumber, string $startDate)
     {
         $date = \Carbon\Carbon::parse($startDate);

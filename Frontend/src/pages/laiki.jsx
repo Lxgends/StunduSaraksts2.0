@@ -24,7 +24,6 @@ function Laiki() {
 
             setLoading(true);
             try {
-
                 const laiksResponse = await axios.get('http://localhost:8000/api/laiks', config);
                 setLaiksData(laiksResponse.data || []);
                 setError(null);
@@ -39,12 +38,13 @@ function Laiki() {
         fetchData();
     }, []);
 
-    const renderClassTimes = (startId, endId) => {
+    const renderClassTimes = (startId, endId, startingNumber = 1) => {
+        let classNumber = startingNumber;
         return laiksData
             .filter(item => item.id >= startId && item.id <= endId)
-            .map((item, index) => (
+            .map((item) => (
                 <div className="classTime" key={item.id}>
-                    <strong className="classTitle"><p>{index + 1}. Pārstunda</p></strong>
+                    <strong className="classTitle"><p>{classNumber++}. Pārstunda</p></strong>
                     <strong><p>{moment(item.sakumalaiks, 'HH:mm:ss').format('HH:mm')} - {moment(item.beigulaiks, 'HH:mm:ss').format('HH:mm')}</p></strong>
                 </div>
             ));
@@ -60,21 +60,35 @@ function Laiki() {
                     <div className="pirmdiena">
                         <strong className="titleb">Pirmdiena - Ceturtdiena</strong>
                         {renderClassTimes(1, 2)}
-                        <div className="pusdTime">
-                            <strong className="breakTitle">Pusdienu partraukums</strong>
-                            <strong><p>11:30 - 12:30</p></strong>
-                        </div>
-                        {renderClassTimes(3, 5)}
+                        {laiksData.find(item => item.id === 11) && (
+                            <div className="pusdTime">
+                                <strong className="breakTitle">Pusdienu pārtraukums</strong>
+                                <strong>
+                                    <p>
+                                        {moment(laiksData.find(item => item.id === 11).sakumalaiks, 'HH:mm:ss').format('HH:mm')} -{' '}
+                                        {moment(laiksData.find(item => item.id === 11).beigulaiks, 'HH:mm:ss').format('HH:mm')}
+                                    </p>
+                                </strong>
+                            </div>
+                        )}
+                        {renderClassTimes(3, 5, 3)}
                     </div>
 
                     <div className="piektdiena">
                         <strong className="titleb">Piektdiena</strong>
                         {renderClassTimes(6, 8)}
-                        <div className="pusdTime">
-                            <strong className="breakTitle">Pusdienu partraukums</strong>
-                            <strong><p>12:30 - 13:00</p></strong>
-                        </div>
-                        {renderClassTimes(9, 10)}
+                        {laiksData.find(item => item.id === 12) && (
+                            <div className="pusdTime">
+                                <strong className="breakTitle">Pusdienu pārtraukums</strong>
+                                <strong>
+                                    <p>
+                                        {moment(laiksData.find(item => item.id === 12).sakumalaiks, 'HH:mm:ss').format('HH:mm')} -{' '}
+                                        {moment(laiksData.find(item => item.id === 12).beigulaiks, 'HH:mm:ss').format('HH:mm')}
+                                    </p>
+                                </strong>
+                            </div>
+                        )}
+                        {renderClassTimes(9, 10, 4)}
                     </div>
                 </>
             )}

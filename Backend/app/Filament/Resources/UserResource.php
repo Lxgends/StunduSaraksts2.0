@@ -21,11 +21,11 @@ class UserResource extends Resource
 {
 
     public static function getModelLabel(): string{
-        return 'Pievienot Administratoru';
+        return 'administratora profils';
     }
     
 public static function getPluralModelLabel(): string{
-        return 'Pievienot Administratorus';
+        return 'Administratori';
     }
 
     protected static ?string $model = User::class;
